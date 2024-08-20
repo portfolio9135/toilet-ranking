@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState, memo, useCallback } from "react";
+import React, { FC, useState, memo } from "react";
 import Link from "next/link";
 
 import MenuIconButton from "../../atoms/button/MenuIconButton";
@@ -21,8 +21,11 @@ const Header: FC = memo(() => {
         </Link>
 
         <div className="hidden md:flex items-center text-sm">
+          <Link href="/post" passHref className="pr-4 hover:underline">
+            投稿する
+          </Link>
           <Link href="/list" passHref className="pr-4 hover:underline">
-            一覧
+            投稿一覧
           </Link>
           <Link href="/about" passHref className="pr-4 hover:underline">
             About

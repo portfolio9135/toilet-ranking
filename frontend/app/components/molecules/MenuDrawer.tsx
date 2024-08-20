@@ -3,7 +3,7 @@ import React, { FC, memo } from "react";
 
 type Props = {
   isOpen: boolean;
-  onClose: ()=> void;
+  onClose: () => void;
 };
 
 const MenuDrawer: FC<Props> = memo((props) => {
@@ -17,8 +17,11 @@ const MenuDrawer: FC<Props> = memo((props) => {
       style={{ top: "64px" }}
     >
       <div className="p-8 text-center">
+      <Link href="/post" passHref className="block py-2 hover:underline">
+          投稿する@
+        </Link>
         <Link href="/list" passHref className="block py-2 hover:underline">
-          一覧@
+          投稿一覧@
         </Link>
         <Link href="/about" passHref className="block py-2 hover:underline">
           About@

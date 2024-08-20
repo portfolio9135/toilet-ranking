@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 interface Toilets {
   id: number;
@@ -10,16 +10,16 @@ interface Toilets {
   description: string;
 }
 
-function page() {
-    //<Toilets[]>は、Toilets型のオブジェクトを要素として持つ配列を表します。
-    const [toilets, setToilets] = useState<Toilets[]>([]);
+const page: FC = () => {
+  //<Toilets[]>は、Toilets型のオブジェクトを要素として持つ配列を表します。
+  const [toilets, setToilets] = useState<Toilets[]>([]);
 
-    useEffect(() => {
-      fetch("http://localhost:3001/toilets")
-        .then((res) => res.json())
-        .then((data) => setToilets(data))
-        .catch((err) => console.error("エラーが発生しました", err));
-    }, []);
+  useEffect(() => {
+    fetch("http://localhost:3001/toilets")
+      .then((res) => res.json())
+      .then((data) => setToilets(data))
+      .catch((err) => console.error("エラーが発生しました", err));
+  }, []);
 
   return (
     <div className="pt-20">
@@ -39,6 +39,6 @@ function page() {
       </div>
     </div>
   );
-}
+};
 
 export default page;
