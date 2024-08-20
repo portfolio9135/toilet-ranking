@@ -14,7 +14,7 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) throw err;
-  console.log('MySQL Connected...');
+  console.log('MySQL データベースに接続中...');
 });
 
 // リクエストボディがJSON形式で送られてきたときに
@@ -63,5 +63,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`サーバーの準備ができましたー---  http://localhost:${port}`);
 });

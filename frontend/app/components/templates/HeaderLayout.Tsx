@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { FC, ReactNode, memo } from "react";
 
-export const HeaderLayout = () => {
+import Header from "../organisms/layout/Header";
+
+type Props = {
+  children: ReactNode;
+};
+
+const HeaderLayout: FC<Props> = memo((props) => {
+  const { children } = props;
+
   return (
-    <div>HeaderLayout</div>
-  )
-}
+    <>
+      <Header />
+      {children}
+    </>
+  );
+});
 
+export default HeaderLayout;
