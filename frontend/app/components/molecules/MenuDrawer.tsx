@@ -3,7 +3,6 @@ import React, { FC, memo } from "react";
 
 type Props = {
   isOpen: boolean;
-  onClose: () => void;
 };
 
 const MenuDrawer: FC<Props> = memo((props) => {
@@ -30,5 +29,7 @@ const MenuDrawer: FC<Props> = memo((props) => {
     </div>
   );
 });
+
+MenuDrawer.displayName = "MenuDrawer";
 
 export default MenuDrawer;

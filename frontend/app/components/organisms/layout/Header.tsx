@@ -40,4 +40,6 @@ const Header: FC = memo(() => {
   );
 });
 
+Header.displayName = "Header";
+
 export default Header;

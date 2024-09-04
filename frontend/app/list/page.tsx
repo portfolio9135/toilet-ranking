@@ -10,12 +10,12 @@ interface Toilets {
   description: string;
 }
 
-const page: FC = () => {
+const Page: FC = () => {
   //<Toilets[]>は、Toilets型のオブジェクトを要素として持つ配列を表します。
   const [toilets, setToilets] = useState<Toilets[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/toilets")
+    fetch("http://localhost:5000/toilets")
       .then((res) => res.json())
       .then((data) => setToilets(data))
       .catch((err) => console.error("エラーが発生しました", err));
@@ -41,4 +41,4 @@ const page: FC = () => {
   );
 };
 
-export default page;
+export default Page;

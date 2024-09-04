@@ -49,4 +49,6 @@ const MenuIconButton: FC<Props> = memo((props) => {
   );
 });
 
+MenuIconButton.displayName = "MenuIconButton";
+
 export default MenuIconButton;
