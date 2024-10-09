@@ -24,7 +24,7 @@ const Page: FC = () => {
   return (
     <div className="pt-20">
       <div>
-        <h2>投稿されたトイレの一覧</h2>
+        <h2>投稿されたトイレの一覧@</h2>
         <ul className="custom-grid">
           {toilets.map((toilet) => (
             <li key={toilet.id} className="bg-white shadow-md rounded-lg p-6 max-w-[300px]">

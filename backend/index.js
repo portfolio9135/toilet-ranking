@@ -1,93 +1,117 @@
+//**********************************************************
+//【必要なものをインポートして変数に格納】
 const express = require('express');
 const app = express();
 const port = 5000;
-
 const cors = require('cors');
+const mysql = require('mysql2/promise');
 
 //**********************************************************
 
-// 【インポートまとめ】
-const mysql = require('mysql2');
-
-//**********************************************************
-
-// 【MySQLデータベースへの接続オブジェクトを作成して、変数dbに格納】
-const db = mysql.createConnection({
+//【MySQLデータベースへの接続オブジェクトを作成】
+const dbConfig = {
   host: 'db',
   user: 'root',
   password: 'example',
   database: 'toilet_ranking'
-});
+};
 
 //**********************************************************
 
-//【接続】
-db.connect((err) => {
-  if (err) throw err;
-  console.log('MySQL データベースに接続中...');
-});
+// 【データベース作成の関数】
+const createDatabaseIfNotExists = async () => {
+  const connection = await mysql.createConnection({
+    host: dbConfig.host,
+    user: dbConfig.user,
+    password: dbConfig.password,
+  });
+
+  // データベースが存在しない場合は作成する
+  await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`);
+  await connection.end();
+};
 
 //**********************************************************
 
-//【JSONを変換】
-// リクエストボディがJSON形式で送られてきたときに
-//そのデータをパースしてreq.bodyに格納するミドルウェアを設定
+// 【テーブル作成の関数】
+const createTablesIfNotExists = async () => {
+  const db = await mysql.createConnection(dbConfig);
+
+  // toiletsテーブルを作成するSQLクエリ
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS toilets (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      location VARCHAR(255) NOT NULL,
+      rating FLOAT NOT NULL
+    )
+  `;
+
+  await db.query(createTableQuery); // テーブル作成を実行
+  await db.end();
+};
+
+//**********************************************************
+
+// 【データベースに接続し、データベースを作成】
+const connectToDatabase = async (retries = 10, delay = 5000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await createDatabaseIfNotExists();
+      await createTablesIfNotExists();
+      const db = await mysql.createConnection(dbConfig);
+      const { host, port } = dbConfig;
+      console.log(`MySQL接続成功! ホスト: ${host}, ポート: ${port}`);
+      return db;
+    } catch (err) {
+      console.error(`MySQL接続失敗、再試行中... (${i+1}/${retries})`);
+      if (i < retries - 1) {
+        await new Promise(res => setTimeout(res, delay)); // 5秒待ってから再試行
+      } else {
+        throw err;
+      }
+    }
+  }
+};
+
+//**********************************************************
+
+//【接続を非同期で行う】
+let db;
+
+const initalize = async () => {
+  try {
+    db = await connectToDatabase();
+  } catch (err) {
+    console.error("初期化中にエラー発生:", err);
+  }
+};
+
 app.use(express.json());
-
-//**********************************************************
-
-// 【これでCORSを許可する設定になる】
 app.use(cors());
 
 //**********************************************************
 
-// 【POSTリクエストの確認】
-app.post("/example", (req, res) => {
+//【POSTリクエストの確認】
+app.post("/test", (req, res) => { // タイポ修正
   console.log(req.body);
-  res.send("Data received!!!")
+  res.send("データを受信しました!!");
 });
 
 //**********************************************************
 
-// 【トイレ情報を追加するエンドポイント（POSTリクエスト）】
-// app.post("/toilets", (req, res) => {
-//     //req.bodyのオブジェクトを分割代入
-//     const { name, address, rating, description } = req.body;
-//     const sql = `insert into toilets (name, address, rating, description) values (?, ?, ?, ?)`;
-
-//     db.query(sql, [name, address, rating, description], (err, result) => {
-//       if (err) {
-//         console.error("エラー発生", err);
-//         res.status(500).send("トイレ情報の追加中にエラーが発生しました。");
-//         return;
-//       }
-//       res.send("トイレ情報を追加しました!!");
-//     });
-// });
-
-//**********************************************************
-
-// 【トイレ情報を取得するエンドポイント（GETリクエスト）】
-app.get("/toilets", (req, res) => {
-  const sql = `select * from toilets`;
-  db.query(sql, (err, results) => {
-    if(err) {
-      console.error("エラー発生", err);
-      return;
-    }
-    res.json(results);
-  });
-});
-
-//**********************************************************
-
-// 【ルートエンドポイント】
+//【ルートエンドポイント】
 app.get('/', (req, res) => {
   res.send('Hello World!!!');
 });
 
 //**********************************************************
 
-app.listen(port, () => {
-  console.log(`サーバーの準備ができましたー---  http://localhost:${port}`);
+//【アプリケーションの起動】
+initalize().then(() => {
+  app.listen(port, () => {
+    console.log(`サーバーの準備ができましたーーーー http://localhost:${port}`);
+  });
+}).catch(err => {
+  console.error("初期化エラーですーーーーーーーーー", err);
 });
