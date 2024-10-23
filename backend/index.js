@@ -12,7 +12,7 @@ const mysql = require('mysql2/promise');
 const dbConfig = {
   host: 'db',
   user: 'root',
-  password: 'example',
+  password: 'pass',
   database: 'toilet_ranking'
 };
 
@@ -28,6 +28,7 @@ const createDatabaseIfNotExists = async () => {
 
   // データベースが存在しない場合は作成する
   await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`);
+  console.log(`データベースを作成しましたーーーーーーーーーーーーーーーーーーーーー${dbConfig.database}`);
   await connection.end();
 };
 
@@ -48,6 +49,7 @@ const createTablesIfNotExists = async () => {
   `;
 
   await db.query(createTableQuery); // テーブル作成を実行
+  console.log(`テーブルを作成しましたーーーーーーーーーーーーーーーーーーーーー${db}`);
   await db.end();
 };
 
@@ -60,11 +62,10 @@ const connectToDatabase = async (retries = 10, delay = 5000) => {
       await createDatabaseIfNotExists();
       await createTablesIfNotExists();
       const db = await mysql.createConnection(dbConfig);
-      const { host, port } = dbConfig;
-      console.log(`MySQL接続成功! ホスト: ${host}, ポート: ${port}`);
+      console.log(`${i+1}回目でMySQL接続成功しましたーーーーーーーーーーーーーーーーーーーーーー`);
       return db;
     } catch (err) {
-      console.error(`MySQL接続失敗、再試行中... (${i+1}/${retries})`);
+      console.error(`${i+1}回目のMySQL接続は、、失敗!! 再試行中です... (${i+1}/${retries})`);
       if (i < retries - 1) {
         await new Promise(res => setTimeout(res, delay)); // 5秒待ってから再試行
       } else {

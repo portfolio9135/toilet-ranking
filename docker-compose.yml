@@ -1,28 +1,48 @@
-version: '3'
 services:
+  # 【フロントエンドのコンテナ】
   frontend:
+    # frontendディレクトリ内のDockerfileを使って、フロントエンドのコンテナをビルドする。
     build: ./frontend
+
+    # ホストの3000番ポートとコンテナ内の3000番ポートを接続。これで、ブラウザからlocalhost:3000でアクセスできるようになる。
     ports:
       - "3000:3000"
+
+    # ホストのfrontendフォルダをコンテナ内の/appにマウントして、ファイルの変更をリアルタイムで反映させる。
     volumes:
       - ./frontend:/app
-    environment:
-      - NODE_ENV=development
 
+
+
+  # 【バックエンドのコンテナ】
   backend:
     build: ./backend
+
     ports:
       - "5000:5000"
+
     volumes:
       - ./backend:/app
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - db
 
-  db:
-    image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: example
-    ports:
-      - "3306:3306"
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=pass
+      - DB_NAME=toilet_ranking
+
+  # 【ミドルウェア(データベース)のコンテナ】
+  db:
+    # MySQLの公式イメージを使ってコンテナを作成。
+    image: mysql:5.7
+
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: toilet_ranking
+
+    # ボリュームのマウント先を指定
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+# ボリュームを明示的に定義
+volumes:
+  mysql-data:
