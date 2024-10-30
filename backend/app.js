@@ -7,6 +7,7 @@ const cors = require('cors');
 const mysql = require('mysql2/promise');
 
 const postRouter = express.Router();
+const listRouter = express.Router();
 
 //**********************************************************
 
@@ -98,7 +99,7 @@ const initalize = async () => {
 
 //**********************************************************
 
-// 【フロントからリクエストを受け取るAPIエンドポイント】
+// 【投稿ページのAPI】
 postRouter.post('/', async (req, res) => {
   const { title, location, rating} = req.body;
 
@@ -113,6 +114,27 @@ postRouter.post('/', async (req, res) => {
 
 // ルーターをアプリに追加
 app.use('/post', postRouter);
+
+//**********************************************************
+
+// 【投稿一覧ページのAPI】
+listRouter.get('/', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM toilets'); // toiletsテーブルの全データを取得
+    res.json(rows); // 取得したデータを返す
+  } catch (error) {
+    console.error("データの取得に失敗しました:", error);
+    res.status(500).json({ error: 'データの取得に失敗しました' });
+  }
+});
+
+// ルーターをアプリに追加
+app.use('/list', listRouter);
+
+//**********************************************************
+
+
+
 
 
 

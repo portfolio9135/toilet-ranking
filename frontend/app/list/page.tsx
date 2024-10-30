@@ -2,36 +2,46 @@
 
 import React, { FC, useEffect, useState } from "react";
 
-interface Toilets {
+interface Toilet {
   id: number;
-  name: string;
-  lacation: string;
+  title: string;
+  location: string;
   rating: number;
 }
 
 const Page: FC = () => {
-  //<Toilets[]>は、Toilets型のオブジェクトを要素として持つ配列を表します。
-  const [toilets, setToilets] = useState<Toilets[]>([]);
+  const [toilets, setToilets] = useState<Toilet[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/toilets")
-      .then((res) => res.json())
-      .then((data) => setToilets(data))
-      .catch((err) => console.error("エラーが発生しました", err));
+    const fetchToilets = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/list");
+        if (response.ok) {
+          const data = await response.json();
+          setToilets(data);
+          console.log("データ取得成功ですーーーーーー");
+
+        } else {
+          console.error("一覧取得失敗!!!:", response.statusText);
+        }
+      } catch (error) {
+        console.error("エラーが発生しました:", error);
+      }
+    };
+
+    fetchToilets();
   }, []);
 
   return (
     <div className="pt-20">
       <div>
-        <h2>投稿されたトイレの一覧@</h2>
+        <h2>投稿されたトイレの一覧</h2>
         <ul className="custom-grid">
           {toilets.map((toilet) => (
             <li key={toilet.id} className="bg-white shadow-md rounded-lg p-6 max-w-[300px]">
               <div className="text-lg font-bold mb-2">id : {toilet.id}</div>
-              <div className="text-lg font-bold mb-2">住所 : {toilet.address}</div>
-              <div className="text-lg font-bold mb-2">{toilet.name}</div>
-              <div className="text-lg font-bold mb-2">星{toilet.rating}つ</div>
-              <div className="text-lg font-bold mb-2">{toilet.description}</div>
+              <div className="text-lg font-bold mb-2">{toilet.title}</div>
+              <div className="text-lg font-bold mb-2">星 {toilet.rating}つ</div>
             </li>
           ))}
         </ul>
