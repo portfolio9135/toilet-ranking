@@ -5,9 +5,8 @@ import React, { FC, useEffect, useState } from "react";
 interface Toilets {
   id: number;
   name: string;
-  address: string;
+  lacation: string;
   rating: number;
-  description: string;
 }
 
 const Page: FC = () => {

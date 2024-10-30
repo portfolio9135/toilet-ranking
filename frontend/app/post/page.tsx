@@ -4,32 +4,42 @@ import React, { useState } from "react";
 
 const page = () => {
   //【状態を管理する変数】
-  const [title, setTitle] = useState("");
+  const [postTitle, setPostTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [rating, setRating] = useState(0);
 
   //【発火させる関数】
   const handleSubmit = async (e) => {
     e.preventDefault(); //ページのリロードを防ぐ
 
+    console.log("投稿する関数は発火しましたーーーー");
+
     try {
-      const response = await fetch("http://localhost:5000/posts", {
+      const response = await fetch("http://localhost:5000/post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json", //JSON形式で送信
         },
-        body: JSON.stringify({ title }), //タイトルをJSON形式に変換して送信
+        body: JSON.stringify({
+          title: postTitle,
+          location: location, // 住所を追加
+          rating: rating, // 固定の評価を送信するか、別の方法で取得するか決めてな
+        }),
       });
 
       if (response.ok) {
         //成功した時の処理
-        console.log("投稿が成功しました");
+        console.log("投稿が成功しましたーーーーーーーー！");
+        setPostTitle("");
+        setLocation("");
+        setRating(0); // もし評価があればこれもリセット
       } else {
         //エラーハンドリング
         console.error("投稿に失敗しました!!");
       }
     } catch (err) {
-      console.error("エラーが発生しました", err);
+      console.error("エラーが発生しました！！", err);
       console.log(err);
-
     }
   };
 
@@ -50,8 +60,8 @@ const page = () => {
             <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">おトイレ名</h2>
             <input
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={postTitle}
+              onChange={(e) => setPostTitle(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#03c1ab]"
             />
           </div>

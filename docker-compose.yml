@@ -30,6 +30,8 @@ services:
       - DB_PASSWORD=pass
       - DB_NAME=toilet_ranking
 
+
+
   # 【ミドルウェア(データベース)のコンテナ】
   db:
     # MySQLの公式イメージを使ってコンテナを作成。
@@ -42,6 +44,8 @@ services:
     # ボリュームのマウント先を指定
     volumes:
       - mysql-data:/var/lib/mysql
+
+
 
 # ボリュームを明示的に定義
 volumes:

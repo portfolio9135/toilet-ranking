@@ -6,6 +6,14 @@ const port = 5000;
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 
+const postRouter = express.Router();
+
+//**********************************************************
+
+// 【CORSとJSON形式のデータ送信を許可】
+app.use(cors());
+app.use(express.json());
+
 //**********************************************************
 
 //【MySQLデータベースへの接続オブジェクトを作成】
@@ -42,7 +50,7 @@ const createTablesIfNotExists = async () => {
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS toilets (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
+      title VARCHAR(255) NOT NULL,
       location VARCHAR(255) NOT NULL,
       rating FLOAT NOT NULL
     )
@@ -62,10 +70,10 @@ const connectToDatabase = async (retries = 10, delay = 5000) => {
       await createDatabaseIfNotExists();
       await createTablesIfNotExists();
       const db = await mysql.createConnection(dbConfig);
-      console.log(`${i+1}回目でMySQL接続成功しましたーーーーーーーーーーーーーーーーーーーーーー`);
+      console.log(`よし！！${i+1}回目でMySQL接続成功しましたーーーーーーーーーーーーーーーーーーーーーー`);
       return db;
     } catch (err) {
-      console.error(`${i+1}回目のMySQL接続は、、失敗!! 再試行中です... (${i+1}/${retries})`);
+      console.error(`${i+1}回目のMySQL接続は、、、、失敗です!!  再試行中です... (${i+1}/${retries})`);
       if (i < retries - 1) {
         await new Promise(res => setTimeout(res, delay)); // 5秒待ってから再試行
       } else {
@@ -84,27 +92,30 @@ const initalize = async () => {
   try {
     db = await connectToDatabase();
   } catch (err) {
-    console.error("初期化中にエラー発生:", err);
+    console.error("初期化中にエラー発生!:", err);
   }
 };
 
-app.use(express.json());
-app.use(cors());
-
 //**********************************************************
 
-//【POSTリクエストの確認】
-app.post("/test", (req, res) => { // タイポ修正
-  console.log(req.body);
-  res.send("データを受信しました!!");
+// 【フロントからリクエストを受け取るAPIエンドポイント】
+postRouter.post('/', async (req, res) => {
+  const { title, location, rating} = req.body;
+
+  try {
+    const [result] = await db.query('INSERT INTO toilets (title, location, rating) VALUES (?, ?, ?)', [title, location, rating]);
+    res.status(201).json({ id: result.insertId }); // 成功時に201ステータスを返す
+  } catch (error) {
+    console.error("データの挿入に失敗しました:", error);
+    res.status(500).json({ error: 'データの挿入に失敗しました' });
+  }
 });
 
-//**********************************************************
+// ルーターをアプリに追加
+app.use('/post', postRouter);
 
-//【ルートエンドポイント】
-app.get('/', (req, res) => {
-  res.send('Hello World!!!');
-});
+
+
 
 //**********************************************************
 
@@ -116,3 +127,5 @@ initalize().then(() => {
 }).catch(err => {
   console.error("初期化エラーですーーーーーーーーー", err);
 });
+
+//**********************************************************
