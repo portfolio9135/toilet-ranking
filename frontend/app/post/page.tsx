@@ -4,8 +4,9 @@ import React, { useState } from "react";
 
 const page = () => {
   //【状態を管理する変数】
-  const [postTitle, setPostTitle] = useState("");
-  const [location, setLocation] = useState("");
+  const [title, setTitle] = useState("");
+  const [address, setAddress] = useState("");
+  const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
 
   //【発火させる関数】
@@ -18,20 +19,22 @@ const page = () => {
       const response = await fetch("http://localhost:5000/post", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", //JSON形式で送信
+          "Content-Type": "application/json", //JSON形式で送信する
         },
         body: JSON.stringify({
-          title: postTitle,
-          location: location, // 住所を追加
-          rating: rating, // 固定の評価を送信するか、別の方法で取得するか決めてな
+          title: title,
+          address: address,
+          comment: comment,
+          rating: rating,
         }),
       });
 
       if (response.ok) {
         //成功した時の処理
         console.log("投稿が成功しましたーーーーーーーー！");
-        setPostTitle("");
-        setLocation("");
+        setTitle("");
+        setAddress("");
+        setComment("");
         setRating(0); // もし評価があればこれもリセット
       } else {
         //エラーハンドリング
@@ -59,15 +62,17 @@ const page = () => {
           <div>
             <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">おトイレ名</h2>
             <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               type="text"
-              value={postTitle}
-              onChange={(e) => setPostTitle(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#03c1ab]"
             />
           </div>
           <div>
             <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">住所</h2>
             <input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#03c1ab]"
             />
@@ -75,12 +80,23 @@ const page = () => {
           <div>
             <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">投稿者コメント</h2>
             <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
               placeholder="投稿者のコメントを入力"
               cols={30}
               rows={5}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#03c1ab]"
             ></textarea>
           </div>
+
+
+
+
+
+
+
+          
+
           <div>
             <button
               type="submit"

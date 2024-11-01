@@ -22,8 +22,11 @@ const dbConfig = {
   host: 'db',
   user: 'root',
   password: 'pass',
-  database: 'toilet_ranking'
+  database: 'toilet_ranking',
+  charset: 'utf8mb4'
 };
+
+
 
 //**********************************************************
 
@@ -52,7 +55,8 @@ const createTablesIfNotExists = async () => {
     CREATE TABLE IF NOT EXISTS toilets (
       id INT AUTO_INCREMENT PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      location VARCHAR(255) NOT NULL,
+      address VARCHAR(255) NOT NULL,
+      comment VARCHAR(255) NOT NULL,
       rating FLOAT NOT NULL
     )
   `;
@@ -101,10 +105,10 @@ const initalize = async () => {
 
 // 【投稿ページのAPI】
 postRouter.post('/', async (req, res) => {
-  const { title, location, rating} = req.body;
+  const { title, address, comment, rating} = req.body;
 
   try {
-    const [result] = await db.query('INSERT INTO toilets (title, location, rating) VALUES (?, ?, ?)', [title, location, rating]);
+    const [result] = await db.query('INSERT INTO toilets (title, address, comment, rating) VALUES (?, ?, ?, ?)', [title, address, comment, rating]);
     res.status(201).json({ id: result.insertId }); // 成功時に201ステータスを返す
   } catch (error) {
     console.error("データの挿入に失敗しました:", error);
