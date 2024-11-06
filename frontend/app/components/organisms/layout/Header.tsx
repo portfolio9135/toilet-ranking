@@ -14,7 +14,7 @@ const Header: FC = memo(() => {
   };
 
   return (
-    <header className="fixed w-full">
+    <header className="fixed w-full z-10">
       <nav className="bg-teal-500 text-gray-50 flex items-center justify-between p-3 md:p-5">
         <Link href="/" passHref className="mr-8 hover:cursor-pointer hover:opacity-80">
           <h1 className="text-md md:text-lg font-bold">おトイレランキング</h1>

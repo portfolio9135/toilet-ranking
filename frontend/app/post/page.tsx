@@ -1,32 +1,38 @@
 "use client";
 
 import React, { useState } from "react";
+import ReactStars from 'react-rating-stars-component';
 
 const page = () => {
   //【状態を管理する変数】
   const [title, setTitle] = useState("");
+  const [img, setImg] = useState<File | null>(null); //File型またはnull
+  const [imgPreviewUrl, setImgPreviewUrl] = useState("");
   const [address, setAddress] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
 
-  //【発火させる関数】
+
+  //【投稿した時の関数】
   const handleSubmit = async (e) => {
     e.preventDefault(); //ページのリロードを防ぐ
 
     console.log("投稿する関数は発火しましたーーーー");
 
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("address", address);
+    formData.append("comment", comment);
+    formData.append("rating", rating.toString()); //数値を文字列に変換して追加
+
+    if (img !== null) {
+      formData.append("img", img);
+    }
+
     try {
       const response = await fetch("http://localhost:5000/post", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json", //JSON形式で送信する
-        },
-        body: JSON.stringify({
-          title: title,
-          address: address,
-          comment: comment,
-          rating: rating,
-        }),
+        body: formData, //FormDataインスタンスを直接渡す
       });
 
       if (response.ok) {
@@ -35,7 +41,9 @@ const page = () => {
         setTitle("");
         setAddress("");
         setComment("");
-        setRating(0); // もし評価があればこれもリセット
+        setRating(0);
+        setImg(null);
+        setImgPreviewUrl("");
       } else {
         //エラーハンドリング
         console.error("投稿に失敗しました!!");
@@ -46,19 +54,39 @@ const page = () => {
     }
   };
 
+  //【画像を選択した時の関数】
+  const handleImgChange = (e) => {
+    console.log("handleImgChangeが発火しましたーーーー");
+
+    const file = e.target.files[0];
+
+    console.log(`${file}`);
+
+    setImg(file);
+
+    // 画像ファイルが選ばれたら、そのURLを生成してプレビューを表示する
+    if (file) {
+      const imgPreviewUrl = URL.createObjectURL(file);
+      console.log(`これがimgPreviewUrlですよーー${imgPreviewUrl}`);
+
+      setImgPreviewUrl(imgPreviewUrl);
+    } else {
+      setImgPreviewUrl("");
+    }
+  };
+
+  //【星の評価をした時の関数】
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+  }
+
+  //【HTML部分】
   return (
     <div className="p-4  md:p-24">
-      <h1 className="text-3xl font-bold mb-8">投稿ページですよーーーーーー</h1>
+      <h1 className="text-3xl font-bold mb-8 mx-auto w-fit">おトイレの投稿ページ</h1>
 
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">写真</h2>
-            <input
-              type="file"
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#e0f7f5] file:text-[#03c1ab] hover:file:bg-[#ccf0eb]"
-            />
-          </div>
           <div>
             <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">おトイレ名</h2>
             <input
@@ -67,6 +95,21 @@ const page = () => {
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#03c1ab]"
             />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">写真</h2>
+            <input
+              onChange={handleImgChange}
+              type="file"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#e0f7f5] file:text-[#03c1ab] hover:file:bg-[#ccf0eb]"
+            />
+            {imgPreviewUrl && (
+              <img
+                src={imgPreviewUrl}
+                alt="画像プレビュー"
+                className="mt-4 max-w-full h-auto rounded-lg shadow-md"
+              />
+            )}
           </div>
           <div>
             <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">住所</h2>
@@ -88,15 +131,17 @@ const page = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#03c1ab]"
             ></textarea>
           </div>
-
-
-
-
-
-
-
-          
-
+          <div>
+            <label>星の評価:</label>
+            <ReactStars
+              count={5}
+              onChange={handleRatingChange}
+              size={24}
+              activeColor="#ffd700"
+              value={rating}
+              key={rating}
+            />
+          </div>
           <div>
             <button
               type="submit"
