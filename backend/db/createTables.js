@@ -20,18 +20,19 @@ const createTablesIfNotExists = async () => {
   //テーブルを作成するためのSQLクエリを定義している部分。
   //このクエリは、toiletという名前のテーブルを作成するもので、以下のカラムを持ってる
   const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS toilet (
+    CREATE TABLE IF NOT EXISTS toilets (
       id INT AUTO_INCREMENT PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
+      imgUrl VARCHAR(255),
       address VARCHAR(255) NOT NULL,
-      comment VARCHAR(255) NOT NULL,
+      comment VARCHAR(255),
       rating FLOAT NOT NULL
     )
   `;
 
   //定義したSQLクエリを実行して、toiletテーブルを作成している。この処理が完了するまで待つためにawaitを使ってる。
   await db.query(createTableQuery);
-  console.log(`テーブルを作成しましたーーーーーーーーーーーーー toilets`);
+  console.log(`テーブルを作成しましたーーーーーーーーーーーーーtoilets`);
 
   //データベースとの接続を終了している部分。
   //これによって、リソースを解放し、接続をきれいに閉じている。

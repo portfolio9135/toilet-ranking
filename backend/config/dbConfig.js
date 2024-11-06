@@ -5,4 +5,5 @@ module.exports = {
   user: 'root',
   password: 'pass',
   database: 'toilet_ranking',
+  charset: 'utf8mb4'
 };

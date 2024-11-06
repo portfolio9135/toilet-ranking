@@ -15,7 +15,7 @@ const initializeDatabase = async (retries = 10, delay = 10000) => {
       await createDatabaseIfNotExists();
       await createTablesIfNotExists();
       const db = await mysql.createConnection(dbConfig);
-      console.log(`よし！！${i + 1}回目でMySQL接続成功しましたーーーーーーーーーーーーーーーーーーーーーー`);
+      console.log(`やった！！！${i + 1}回目でMySQL接続成功しましたーーーーーーーーーーーーーーーーーーーーーー`);
       return db;
     } catch (err) {
       console.error(`${i + 1}回目のMySQL接続は、、、、失敗です!!  再試行中です... (${i + 1}/${retries})`);
