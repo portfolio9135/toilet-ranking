@@ -39,7 +39,7 @@ const HomePage: FC = () => {
   const filteredToilets = toilets.filter(toilet => toilet.rating === 5);
 
   return (
-    <div className="pt-16">
+    <div className="custom-bg min-h-screen pt-16">
       <div className="p-8">
         <p>※評価が5のトイレ一覧です。</p>
 
