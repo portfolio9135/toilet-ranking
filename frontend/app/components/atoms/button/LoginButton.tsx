@@ -3,9 +3,9 @@ import React from "react";
 const LoginButton = () => {
   return (
     <button
-    className={`   bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transform hover:scale-105 transition duration-300 ease-in-out`}
+    className={`font-bold bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-200`}
     >
-      ログイン
+      ログイン(開発中...)
     </button>
   );
 };

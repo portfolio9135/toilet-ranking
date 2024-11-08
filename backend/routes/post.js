@@ -11,14 +11,12 @@ module.exports = (db) => {
     const { title, address, comment, rating } = req.body;
     const imgUrl = req.file ? req.file.path : ""; // 画像がある場合はパスを取得なければ空文字
 
-    console.log(`imgUrlはこれですよーーーーーー → ${imgUrl}`);
-
     try {
       const [result] = await db.query(
         'INSERT INTO toilets (title, address, comment, rating, imgUrl) VALUES (?, ?, ?, ?, ?)',
         [title, address, comment, rating, imgUrl]
       );
-      res.status(201).json({ id: result.insertId });
+      res.status(201).json({ message: '投稿成功', data: result });
       console.log("データの挿入に成功しましたーーーーーー");
     } catch (error) {
       console.log("データの挿入に失敗しました！！！");

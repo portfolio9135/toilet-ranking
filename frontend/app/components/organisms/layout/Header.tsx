@@ -35,14 +35,14 @@ const Header: FC = memo(() => {
 
   return (
     <header
-      className={`bg-white fixed w-full z-10 ${
+      className={`bg-white fixed w-full z-10 h-20 ${
         isScrolled ? "border-b border-gray-300 shadow-md" : ""
       }`}
     >
       <nav className="flex max-w-[1200px] mx-auto items-center justify-between p-3 md:p-5">
         <Link href="/" passHref className="mr-8 hover:cursor-pointer hover:opacity-80">
           <div className="flex items-center">
-            <img className="w-8 mr-3" src="/favicon.png" alt="タイトルアイコン画像" />
+            <img className=" rounded-full w-9 mr-3" src="/favicon.png" alt="タイトルアイコン画像" />
             <h1 className="text-md md:text-lg font-bold">おトイレランキング</h1>
           </div>
         </Link>
