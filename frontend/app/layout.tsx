@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${inter.className} custom-bg`}>
+      <body className={`${inter.className} custom-bg min-h-screen flex flex-col`}>
         <Header />
         {children}
         <Footer />

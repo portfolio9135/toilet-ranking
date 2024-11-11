@@ -17,26 +17,40 @@ const createTablesIfNotExists = async () => {
   // awaitを使って、接続が完了するの待ってる。このdbという変数が、以降のクエリを実行するための接続オブジェクトになる。
   const db = await mysql.createConnection(dbConfig);
 
-  //テーブルを作成するためのSQLクエリを定義している部分。
-  //このクエリは、toiletという名前のテーブルを作成するもので、以下のカラムを持ってる
-  const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS toilets (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      title VARCHAR(255) NOT NULL,
-      imgUrl VARCHAR(255),
-      address VARCHAR(255) NOT NULL,
-      comment VARCHAR(255),
-      rating FLOAT NOT NULL
-    )
-  `;
+  try {
+    //テーブルを作成するためのSQLクエリを定義している部分。
+    //このクエリは、toiletという名前のテーブルを作成するもので、以下のカラムを持ってる
+    const createToiletsTableQuery = `
+      CREATE TABLE IF NOT EXISTS toilets (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        imgUrl VARCHAR(255),
+        address VARCHAR(255) NOT NULL,
+        comment VARCHAR(255),
+        rating FLOAT NOT NULL
+      )
+    `;
+    await db.execute(createToiletsTableQuery);
+    console.log(`テーブルを作成しましたーーーーーーーーーーーーー【テーブル名: toilets】`);
 
-  //定義したSQLクエリを実行して、toiletテーブルを作成している。この処理が完了するまで待つためにawaitを使ってる。
-  await db.query(createTableQuery);
-  console.log(`テーブルを作成しましたーーーーーーーーーーーーーtoilets`);
-
-  //データベースとの接続を終了している部分。
-  //これによって、リソースを解放し、接続をきれいに閉じている。
-  await db.end();
+    const createUserTableQuery = `
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(255) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
+    await db.execute(createUserTableQuery);
+    console.log(`テーブルを作成しましたーーーーーーーーーーーーー【テーブル名: users】`);
+  }
+  catch(err) {
+    console.error("テーブル作成中にエラーが発生しました！:", err);
+    throw err;
+  } finally {
+    await db.end();
+  }
 };
 
 module.exports = createTablesIfNotExists;

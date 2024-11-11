@@ -12,8 +12,8 @@ const createTablesIfNotExists = require('./createTables');
 const initializeDatabase = async (retries = 10, delay = 10000) => {
   for (let i = 0; i < retries; i++) {
     try {
-      await createDatabaseIfNotExists();
-      await createTablesIfNotExists();
+      await createDatabaseIfNotExists(); //データベースを作成
+      await createTablesIfNotExists(); //テーブルを作成
       const db = await mysql.createConnection(dbConfig);
       console.log(`やった！！！${i + 1}回目でMySQL接続成功しましたーーーーーーーーーーーーーーーーーーーーーー`);
       return db;
