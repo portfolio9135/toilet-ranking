@@ -1,6 +1,6 @@
 // routes/post.js
 const express = require('express');
-const upload = require('../upload/postUpImg'); // 画像アップロード用のミドルウェアをインポート
+const upload = require('../services/upload/postUpImgService'); // 画像アップロード用のミドルウェアをインポート
 
 
 module.exports = (db) => {

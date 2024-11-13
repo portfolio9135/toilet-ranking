@@ -1,5 +1,5 @@
 const multer = require('multer');
-const storage = require('./postUpImgConfig');
+const storage = require('../../config/postUpImgConfig');
 
 // upload インスタンスを作成し、設定した storage を使用
 const upload = multer({ storage: storage });
