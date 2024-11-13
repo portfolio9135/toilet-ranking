@@ -12,17 +12,30 @@ const loginUser = async (email, password, db) => {
     }
 
     const match = await bcryptjs.compare(password, rows[0].password);
+    console.log(`これがrows[0].passwordですーーー 【${rows[0].password}】`);
 
     //パスが一致してない場合
     if (!match) {
       throw new Error('パスワードが間違っています');
     }
 
-    const token = jwt.sign(
-      { userId: rows[0].id, email: rows[0].email }, //トークンに含める情報(ここではユーザーIDとメールアドレス)
-      process.env.JWT_SECRET, //シークレットキー（これは環境変数から取得）
-      { expiresIn: '1h' } //トークンの有効期限（1時間）
-    );
+    //トークンに含める情報(ここではユーザーIDとメールアドレス)
+    const payload = {
+      username: rows[0].username,
+      email: rows[0].email
+    };
+
+    const jwtConfig = {
+      secret: process.env.JWT_SECRET,
+      options: {
+        algorithm: "HS256",
+        expiresIn: "1d",
+      },
+    }
+
+    const token = jwt.sign(payload, jwtConfig.secret, jwtConfig.options);
+
+    console.log(`これがtokenですーーー 【${token}】`);
 
     await db.end();
     return token;

@@ -2,9 +2,8 @@
 
 import React, { useState } from "react";
 
-const page = () => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
-    username: "",
     email: "",
     password: "",
   });
@@ -26,7 +25,7 @@ const page = () => {
     setError("");
 
     try {
-      const response = await fetch("/register", {
+      const response = await fetch("/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,10 +36,10 @@ const page = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("登録成功！");
-        // 登録成功後の処理（例：ログインページへリダイレクトなど）
+        alert("ログイン成功！");
+        // ログイン成功後の処理（例：ダッシュボードへリダイレクトなど）
       } else {
-        setError(data.error || "登録に失敗しました");
+        setError(data.error || "ログインに失敗しました");
       }
     } catch (error) {
       setError("サーバーエラーが発生しました");
@@ -53,25 +52,10 @@ const page = () => {
   return (
     <div className="flex-grow p-24 md:p-24">
       <div className="max-w-md mx-auto bg-gray-100 p-6 shadow-lg rounded-lg mt-10">
-        <h2 className="text-2xl font-semibold text-center text-gray-800">新規登録</h2>
+        <h2 className="text-2xl font-semibold text-center text-gray-800">ログイン</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-6">
           {error && <div className="text-red-500 text-center">{error}</div>}
-
-          <div>
-            <label htmlFor="username" className="block text-gray-700">
-              ユーザー名
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
 
           <div>
             <label htmlFor="email" className="block text-gray-700">
@@ -110,14 +94,14 @@ const page = () => {
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {loading ? "登録中..." : "登録する"}
+            {loading ? "ログイン中..." : "ログインする"}
           </button>
         </form>
 
         <p className="text-center mt-4 text-gray-600">
-          既にアカウントをお持ちですか？{" "}
-          <a href="/login" className="text-blue-500 hover:underline">
-            ログイン
+          アカウントをお持ちでないですか？{" "}
+          <a href="/register" className="text-blue-500 hover:underline">
+            新規登録
           </a>
         </p>
       </div>
@@ -125,4 +109,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default LoginPage;

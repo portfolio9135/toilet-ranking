@@ -8,6 +8,7 @@ const registerUser = async (username, email, password, db) => {
       `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
       [username, email, hashedPassword]
     );
+
   } catch (err) {
     console.error('ユーザー登録中にエラーが発生', err);
     throw err;

@@ -13,10 +13,10 @@ module.exports = (db) => {
       const body = {
         username: username,
         email: email,
-        password: password,
-      }
+        message: "ユーザーの新規登録に成功しました！"
+      };
 
-      res.status(201).json(body);
+      res.status(200).json(body);
     } catch (err) {
       console.error('ユーザー登録エラー:', err);
       res.status(500).json({ message: 'ユーザー登録に失敗しました！' });

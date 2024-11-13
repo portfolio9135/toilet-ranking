@@ -1,10 +1,13 @@
 //**********************************************************
 //【必要なものをインポートして変数に格納】
 const express = require('express');
-const cors = require('cors');
-const initializeDatabase = require('./db/initializeDatabase');
 const app = express();
 const port = 5000;
+const cors = require('cors');
+
+const initializeDatabase = require('./db/initializeDatabase');
+
+require('dotenv').config(); 
 //**********************************************************
 // CORS JSON形式のデータ送信
 // uploadsフォルダへの静的ファイルのアクセス を許可
@@ -28,11 +31,6 @@ const initialize = async () => {
     app.use('/post', postRouter); //投稿機能
     app.use('/list', listRouter); //投稿一覧機能
     app.use('/register', registerRouter); //ユーザーの新規登録機能
-
-    console.log(registerRouter);
-    console.log('registerRouter is function:', typeof registerRouter === 'function');
-
-
     app.use('/login', loginRouter); //ユーザーのログイン機能
 
   } catch (err) {

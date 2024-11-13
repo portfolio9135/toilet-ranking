@@ -9,7 +9,13 @@ module.exports = (db) => {
 
     try {
       const token = await loginUser(email, password, db);
-      res.status(200).json({ token });
+
+      const body = {
+        message: "ユーザーを見つけました！ログイン成功です。",
+        token: token,
+      }
+
+      res.status(200).json(body);
     } catch (err) {
       res.status(400).json({ error: err.message });
     }
@@ -21,7 +27,3 @@ module.exports = (db) => {
 
 //resはExpressのレスポンスオブジェクトで、これを通してクライアント(リクエストを送ってきた側)に
 //データを返す。statusメソッドで、HTTPステータスコードを指定する(200は成功)
-
-//res.status(200).json({ token });
-//この書き方 { token } は短縮表記という、実際には { token: token } と同じ意味
-//クライアントには { "token": "発行されたトークンの値" } というJSONデータが返る
