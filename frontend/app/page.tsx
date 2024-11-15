@@ -15,10 +15,17 @@ interface Toilet {
 }
 
 const HomePage: FC = () => {
+  //【状態変数まとめ】
   const [toilets, setToilets] = useState<Toilet[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   //【ページの読み込み時に実行される関数】
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+
     const fetchToilets = async () => {
       try {
         const response = await fetch("http://localhost:5000/list");
@@ -37,8 +44,14 @@ const HomePage: FC = () => {
     fetchToilets();
   }, []);
 
-  // 評価が5の投稿だけにフィルタリング
+  // 【評価が5の投稿だけにフィルタリングする関数】
   const filteredToilets = toilets.filter((toilet) => toilet.rating === 5);
+
+  //【ログアウト処理の関数】
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+  }
 
   //【ここからHTML部分】
   return (
@@ -243,3 +256,10 @@ const HomePage: FC = () => {
 };
 
 export default HomePage;
+
+
+
+
+
+
+

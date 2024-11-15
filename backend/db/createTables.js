@@ -28,7 +28,7 @@ const createTablesIfNotExists = async () => {
         address VARCHAR(255) NOT NULL,
         comment VARCHAR(255),
         rating FLOAT NOT NULL
-      )
+      ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     `;
     await db.execute(createToiletsTableQuery);
     console.log(`テーブルを作成しましたーーーーーーーーーーーーー【テーブル名: toilets】`);
@@ -40,7 +40,7 @@ const createTablesIfNotExists = async () => {
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+      ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     `;
     await db.execute(createUserTableQuery);
     console.log(`テーブルを作成しましたーーーーーーーーーーーーー【テーブル名: users】`);

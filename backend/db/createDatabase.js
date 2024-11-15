@@ -19,12 +19,26 @@ const createDatabaseIfNotExists = async () => {
   //createConnectionメソッドは、データベースに接続するためのコネクションオブジェクトを作成するためのもの
   //このコネクションオブジェクトを使うことで、データベースに対するクエリを実行したり、データを取得したり、更新したりすることができる
   //指定した設定（ホスト名、ユーザー名、パスワードなど）でMySQLに接続できるようになる
-  const connection =  await mysql.createConnection(dbConfig);
+  const connection = await mysql.createConnection(dbConfig);
 
   //connectionオブジェクトのqueryメソッドは、DBに対してSQLクエリを実行できる
   //CREATE DATABASE IF NOT EXISTSは「DBがなかったら作る」
-  await connection.query(`CREATE DATABASE IF NOT EXISTS ${dbConfig.database}`);
+  await connection.query(`
+    CREATE DATABASE IF NOT EXISTS ${dbConfig.database}
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci
+  `);
+
   console.log(`データベースを作成しましたーーーーーーーーーーー ${dbConfig.database}`);
+
+  // データベースの文字セットをutf8mb4に変更（既存のデータベースに対しても適用）
+  await connection.query(`
+    ALTER DATABASE ${dbConfig.database}
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci
+  `);
+
+  console.log(`データベースの文字セットをutf8mb4に変更しました`);
 
   //.end()メソッドは、データベースとの接続を終了するためのメソッド
   await connection.end();
