@@ -1,16 +1,26 @@
+//【ログインページ】
+
 "use client";
 
 import React, { useState } from "react";
 
 const LoginPage = () => {
+  //********************************************************************************************
+  //【状態変数まとめ】
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const [error, setError] = useState("");
+
   const [loading, setLoading] = useState(false);
 
+  //********************************************************************************************
+  //【関数まとめ】
+
+  //フォーム内容の入力を検知して発火する関数
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,13 +29,14 @@ const LoginPage = () => {
     });
   };
 
+  //フォーム送信時に発火する関数
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const response = await fetch("/login", {
+      const response = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,19 +47,20 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("ログイン成功！");
-        // ログイン成功後の処理（例：ダッシュボードへリダイレクトなど）
+        alert("ログイン成功しました！");
       } else {
-        setError(data.error || "ログインに失敗しました");
+        setError(data.error || "ログインに失敗しました！");
       }
-    } catch (error) {
+    } catch (err) {
       setError("サーバーエラーが発生しました");
     } finally {
       setLoading(false);
     }
   };
 
+  //********************************************************************************************
   //【HTML部分】
+
   return (
     <div className="flex-grow p-24 md:p-24">
       <div className="max-w-md mx-auto bg-gray-100 p-6 shadow-lg rounded-lg mt-10">

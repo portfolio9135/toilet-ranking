@@ -48,19 +48,33 @@ const Header: FC = memo(() => {
         </Link>
 
         <div className="hidden md:flex items-center text-md font-bold">
-          <Link href="/post" passHref className="pr-8 hover:underline hover:underline-offset-8 hover:decoration-2">
+          <Link
+            href="/post"
+            passHref
+            className="pr-8 hover:underline hover:underline-offset-8 hover:decoration-2"
+          >
             投稿する
           </Link>
-          <Link href="/list" passHref className="pr-8 hover:underline hover:underline-offset-8 hover:decoration-2">
+          <Link
+            href="/list"
+            passHref
+            className="pr-8 hover:underline hover:underline-offset-8 hover:decoration-2"
+          >
             投稿一覧
           </Link>
-          <Link href="/about" passHref className="pr-8 hover:underline hover:underline-offset-8 hover:decoration-2">
+          <Link
+            href="/about"
+            passHref
+            className="pr-8 hover:underline hover:underline-offset-8 hover:decoration-2"
+          >
             About
           </Link>
         </div>
 
         <div className="hidden md:block">
-          <LoginButton />
+          <a href="/login">
+            <LoginButton />
+          </a>
         </div>
 
         <MenuIconButton isOpen={isOpen} toggleMenu={toggleMenu} />

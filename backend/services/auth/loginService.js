@@ -19,10 +19,10 @@ const loginUser = async (email, password, db) => {
       throw new Error('パスワードが間違っています');
     }
 
-    //トークンに含める情報(ここではユーザーIDとメールアドレス)
+    //トークンに含める情報
     const payload = {
-      username: rows[0].username,
-      email: rows[0].email
+      email: rows[0].email,
+      password: rows[0].password,
     };
 
     const jwtConfig = {
