@@ -13,6 +13,7 @@ module.exports = (db) => {
       const body = {
         username: username,
         email: email,
+        password: password,
         message: "ユーザーの新規登録に成功しました！"
       };
 

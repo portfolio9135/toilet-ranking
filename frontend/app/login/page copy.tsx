@@ -3,50 +3,7 @@
 import React, { useState } from "react";
 
 const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await fetch("/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("ログイン成功！");
-        // ログイン成功後の処理（例：ダッシュボードへリダイレクトなど）
-      } else {
-        setError(data.error || "ログインに失敗しました");
-      }
-    } catch (error) {
-      setError("サーバーエラーが発生しました");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   //【HTML部分】
   return (

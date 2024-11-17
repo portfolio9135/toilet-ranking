@@ -3,15 +3,26 @@
 import React, { useState } from "react";
 
 const page = () => {
+  //********************************************************************************************
+  //【変数まとめ】
+
+  //フォームの内容（ユーザー名、メール、パスワード）を管理する状態変数
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
 
+  //エラーメッセージを保存するための状態変数
   const [error, setError] = useState("");
+
+  //登録中かどうか判定する状態変数
   const [loading, setLoading] = useState(false);
 
+  //********************************************************************************************
+  //【関数まとめ】
+
+  //入力フォームの内容（ユーザー名、メール、パスワード）の変更を処理する関数
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,13 +31,15 @@ const page = () => {
     });
   };
 
+  //フォームが送信されたときに実行される関数
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
+    //responseは、サーバーから返ってきたレスポンスを表すオブジェクト
     try {
-      const response = await fetch("/register", {
+      const response = await fetch("http://localhost:5000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,11 +47,22 @@ const page = () => {
         body: JSON.stringify(formData),
       });
 
+      //.json()はResponseオブジェクトから返ってきたボディ部分（レスポンスのデータ）を、
+      //JSON形式で扱えるようにパース（解析）するメソッド
       const data = await response.json();
 
+      //response.okは、Responseオブジェクトの真偽値（trueかfalse）を返すプロパティ
+      //HTTPレスポンスが成功か失敗かを簡単に判定するために使う。
       if (response.ok) {
-        alert("登録成功！");
-        // 登録成功後の処理（例：ログインページへリダイレクトなど）
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+        });
+
+        alert("登録成功しました！");
+
+        // 登録成功後の処理（例：ログインページへリダイレクトなどを追記する）
       } else {
         setError(data.error || "登録に失敗しました");
       }
@@ -48,6 +72,8 @@ const page = () => {
       setLoading(false);
     }
   };
+
+  //********************************************************************************************
 
   //【HTML部分】
   return (

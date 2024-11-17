@@ -32,7 +32,7 @@ const initialize = async () => {
     const db = await initializeDatabase();
 
     // 【ルーターの読み込み】
-    const postRouter = require('./routes/post')(db); // 投稿ルーター
+    const postRouter = require('./routes/post')(db); // 投稿
     const listRouter = require('./routes/list')(db); // 投稿一覧ルーター
     const registerRouter = require('./routes/register')(db); // ユーザー新規登録ルーター
     const loginRouter = require('./routes/login')(db); // ユーザーログインルーター
