@@ -37,7 +37,6 @@ const loginUser = async (email, password, db) => {
 
     console.log(`これがtokenですーーー 【${token}】`);
 
-    await db.end();
     return token;
   } catch (err) {
     throw new Error(err.message);
