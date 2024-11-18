@@ -2,7 +2,10 @@
 
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
   //********************************************************************************************
@@ -12,10 +15,9 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-
   const [error, setError] = useState("");
-
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   //********************************************************************************************
   //【関数まとめ】
@@ -42,17 +44,20 @@ const LoginPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-        credentials: 'include', // クッキーを許可
+        credentials: "include", // クッキーを許可
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert("ログイン成功しました！");
+        toast.success("ログイン成功しました");
+        router.push("/");
       } else {
+        toast.error("ログイン失敗しました！");
         setError(data.error || "ログインに失敗しました！");
       }
     } catch (err) {
+      toast.error("エラーが発生しました！");
       setError("サーバーエラーが発生しました");
     } finally {
       setLoading(false);
@@ -100,15 +105,17 @@ const LoginPage = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            {loading ? "ログイン中..." : "ログイン"}
-          </button>
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? "ログイン中..." : "ログイン"}
+            </button>
+          </div>
         </form>
 
         <p className="text-center mt-4 text-gray-600">
