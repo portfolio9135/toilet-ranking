@@ -25,14 +25,6 @@ const page = () => {
   //【関数まとめ】
 
   //入力フォームの内容（ユーザー名、メール、パスワード）の変更を処理する関数
-  //e.targetはinputタグのhtml要素。name：フォームのname属性の値が入る。value：フォームの現在の入力値が入る。
-  //...formDatajは「スプレッド構文」。今までのformDataの中身をそのままコピーして、新しいオブジェクトを作ってる
-
-  //[name]: value,の[]は 「キーを動的に指定する」 特別な記法で、配列とは関係ない。
-  //これは、JavaScriptのオブジェクトで、キー（プロパティ名）を動的に指定できる仕組みのこと
-  //Computed Property Nameって名前らしい。。
-  //e.target（input html要素）で取得した値でformDataオブジェクトを更新してる
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -84,7 +76,6 @@ const page = () => {
   };
 
   //********************************************************************************************
-
   //【HTML部分】
   return (
     <div className="flex-grow p-24 md:p-24">
@@ -162,3 +153,11 @@ const page = () => {
 };
 
 export default page;
+
+//e.targetはinputタグのhtml要素。name：フォームのname属性の値が入る。value：フォームの現在の入力値が入る。
+//...formDatajは「スプレッド構文」。今までのformDataの中身をそのままコピーして、新しいオブジェクトを作ってる
+
+//[name]: value,の[]は 「キーを動的に指定する」 特別な記法で、配列とは関係ない。
+//これは、JavaScriptのオブジェクトで、キー（プロパティ名）を動的に指定できる仕組みのこと
+//Computed Property Nameって名前らしい。。
+//e.target（input html要素）で取得した値でformDataオブジェクトを更新してる

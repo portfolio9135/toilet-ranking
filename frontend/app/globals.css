@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 【投稿一覧画面のグリット表示】 */
+.custom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  place-items: center;
+  gap: clamp(1rem, 4vw, 2rem); /* 16px（1rem）〜32px（2rem）の範囲で調整 */
+}
+
+/* 【背景画像】 */
+/* .custom-bg {
+  @apply bg-cover bg-center bg-no-repeat;
+  background-image: url('/bg-02.jpg');
+} */
+
+.custom-bg-color {
+  background-color: #F2F1EC;
+}
+
+.custom-bg-color-01 {
+  background-color: #FFF7E1;
+}
+
+.custom-color-green {
+  color: #34E0A1;
+}

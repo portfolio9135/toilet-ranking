@@ -26,11 +26,7 @@ coverage/
 out/
 
 # Production
-build/
-out/
-
-# Static build
-/static/
+dist/
 
 # Typescript
 *.tsbuildinfo
@@ -41,18 +37,20 @@ out/
 # Optional stylelint cache
 .stylelintcache
 
-# Tailwind CSS
-tailwind.config.js
-tailwind.config.ts
-
 # Ignore compiled assets
 *.css
 *.css.map
 *.scss
 *.sass
 
+# But keep globals.css
+!globals.css
+
 # macOS
 .DS_Store
+
+# Windows
+Thumbs.db
 
 # VSCode
 .vscode/

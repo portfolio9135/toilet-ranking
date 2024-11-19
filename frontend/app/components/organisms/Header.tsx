@@ -6,18 +6,26 @@ import Link from "next/link";
 import MenuIconButton from "../atoms/button/MenuIconButton";
 import MenuDrawer from "../molecules/MenuDrawer";
 import LoginButton from "../atoms/button/LoginButton";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../store/authState";
 
 const Header: FC = memo(() => {
-  //【状態変数を定義】
+  //********************************************************************************************
+  //【状態変数まとめ】
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const isLoggedIn = useRecoilValue(authState); // Recoilからログイン状態を取得
 
-  //【ハンバーガーメニューのための関数】
+
+  //********************************************************************************************
+  //【関数まとめ】
+
+  //ハンバーガーメニュー
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  //【初期関数】
+  //初期レンダリング時の関数: スクロール検知
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -33,6 +41,10 @@ const Header: FC = memo(() => {
     };
   }, []);
 
+
+
+  //********************************************************************************************
+  //【HTML部分】
   return (
     <header
       className={`bg-white fixed w-full z-10 h-20 ${
@@ -72,9 +84,13 @@ const Header: FC = memo(() => {
         </div>
 
         <div className="hidden md:block">
-          <a href="/login">
-            <LoginButton />
-          </a>
+        {console.log(`${isLoggedIn}  isLoggedInの値 Header.tsxファイル`)}
+
+          {isLoggedIn ? (
+            <LoginButton label="ログアウト" />
+          ) : (
+            <LoginButton href="/login" label="ログイン" />
+          )}
         </div>
 
         <MenuIconButton isOpen={isOpen} toggleMenu={toggleMenu} />
@@ -88,3 +104,9 @@ const Header: FC = memo(() => {
 Header.displayName = "Header";
 
 export default Header;
+
+//Header.displayName = "Header"; は、React コンポーネントに 明示的な名前 を設定するためのプロパティです。これにより、デバッグツールやエラーメッセージでそのコンポーネント名が表示されるようになります。
+//React.memo や React.forwardRef でラップしたコンポーネントは、名前が自動的に Memo や ForwardRef などに変わります。この場合、デバッグ時にコンポーネントの名前がわかりづらくなることがあります。
+//displayName を明示的に設定すると、名前を「Header」として表示させることができます。
+
+//isLoggedInの切り替えロジックはAuthInitializerが担当するから、ここでは読み取るだけ。

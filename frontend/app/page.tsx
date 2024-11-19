@@ -44,6 +44,11 @@ const HomePage: FC = () => {
     fetchToilets();
   }, []);
 
+  useEffect(() => {
+    console.log(`${isLoggedIn}  isLoggedInの値 HomePage.tsxファイル`)
+  }, [isLoggedIn]);
+
+
   // 【評価が5の投稿だけにフィルタリングする関数】
   const filteredToilets = toilets.filter((toilet) => toilet.rating === 5);
 
