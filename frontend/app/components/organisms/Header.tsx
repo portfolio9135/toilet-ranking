@@ -6,16 +6,12 @@ import Link from "next/link";
 import MenuIconButton from "../atoms/button/MenuIconButton";
 import MenuDrawer from "../molecules/MenuDrawer";
 import LoginButton from "../atoms/button/LoginButton";
-import { useRecoilValue } from "recoil";
-import { authState } from "../../store/authState";
 
 const Header: FC = memo(() => {
   //********************************************************************************************
   //【状態変数まとめ】
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const isLoggedIn = useRecoilValue(authState); // Recoilからログイン状態を取得
-
 
   //********************************************************************************************
   //【関数まとめ】
@@ -41,8 +37,6 @@ const Header: FC = memo(() => {
     };
   }, []);
 
-
-
   //********************************************************************************************
   //【HTML部分】
   return (
@@ -52,9 +46,17 @@ const Header: FC = memo(() => {
       }`}
     >
       <nav className="flex max-w-[1200px] mx-auto items-center justify-between p-3 md:p-5">
-        <Link href="/" passHref className="mr-8 hover:cursor-pointer hover:opacity-80">
+        <Link
+          href="/"
+          passHref
+          className="mr-8 hover:cursor-pointer hover:opacity-80"
+        >
           <div className="flex items-center">
-            <img className=" rounded-full w-9 mr-3" src="/favicon.png" alt="タイトルアイコン画像" />
+            <img
+              className=" rounded-full w-9 mr-3"
+              src="/favicon.png"
+              alt="タイトルアイコン画像"
+            />
             <h1 className="text-md md:text-lg font-bold">おトイレランキング</h1>
           </div>
         </Link>
@@ -84,13 +86,7 @@ const Header: FC = memo(() => {
         </div>
 
         <div className="hidden md:block">
-        {console.log(`${isLoggedIn}  isLoggedInの値 Header.tsxファイル`)}
-
-          {isLoggedIn ? (
-            <LoginButton label="ログアウト" />
-          ) : (
-            <LoginButton href="/login" label="ログイン" />
-          )}
+          <LoginButton href="/login" label="ログイン" />
         </div>
 
         <MenuIconButton isOpen={isOpen} toggleMenu={toggleMenu} />

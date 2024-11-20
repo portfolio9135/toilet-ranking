@@ -15,17 +15,40 @@ interface Toilet {
 }
 
 const HomePage: FC = () => {
+  //********************************************************************************************
   //【状態変数まとめ】
+
   const [toilets, setToilets] = useState<Toilet[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  //********************************************************************************************
+  //【関数まとめ】
+
   //【ページの読み込み時に実行される関数】
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-    }
+    // トークンの検証を行うAPIリクエスト
+    const verifyToken = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/verify-token", {
+          method: "GET",
+          credentials: "include", // クッキーも送信する
+        });
 
+        const result = await response.json();
+        if (result.isLoggedIn) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("トークン検証エラー:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    verifyToken();
+
+    // トイレデータの取得
     const fetchToilets = async () => {
       try {
         const response = await fetch("http://localhost:5000/list");
@@ -44,19 +67,15 @@ const HomePage: FC = () => {
     fetchToilets();
   }, []);
 
+  // 【追加で、isLoggedInが変わったときにログを出すuseEffect】
   useEffect(() => {
-    console.log(`${isLoggedIn}  isLoggedInの値 HomePage.tsxファイル`)
+    console.log(`isLoggedInの値はこれですよーーーーー 【 ${isLoggedIn} 】`);
   }, [isLoggedIn]);
-
 
   // 【評価が5の投稿だけにフィルタリングする関数】
   const filteredToilets = toilets.filter((toilet) => toilet.rating === 5);
 
-  //【ログアウト処理の関数】
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-  }
+  //********************************************************************************************
 
   //【ここからHTML部分】
   return (
@@ -81,7 +100,9 @@ const HomePage: FC = () => {
       <div className="mt-24 custom-bg-color py-8 px-6">
         <div className="w-fit mx-auto">
           <h2 className="font-bold text-2xl">最高評価のおトイレ</h2>
-          <p className="text-md text-gray-600 mt-1">※評価が5のトイレ一覧です。</p>
+          <p className="text-md text-gray-600 mt-1">
+            ※評価が5のトイレ一覧です。
+          </p>
           <ul className="custom-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 break-words mt-5">
             {filteredToilets.map((toilet) => (
               <li
@@ -92,7 +113,11 @@ const HomePage: FC = () => {
 
                 <img
                   className="mb-2 border border-gray-300 rounded-lg w-full h-40 object-cover"
-                  src={toilet.imgUrl ? `http://localhost:5000/${toilet.imgUrl}` : `/no-image.png`}
+                  src={
+                    toilet.imgUrl
+                      ? `http://localhost:5000/${toilet.imgUrl}`
+                      : `/no-image.png`
+                  }
                   alt="投稿画像"
                 />
 
@@ -102,7 +127,10 @@ const HomePage: FC = () => {
                 <div
                   className="text-lg mb-2 overflow-hidden break-words"
                   style={{
-                    color: toilet.comment.length > 150 ? "rgba(0, 0, 0, 0.6)" : "black", // 長いコメントの色を薄く
+                    color:
+                      toilet.comment.length > 150
+                        ? "rgba(0, 0, 0, 0.6)"
+                        : "black", // 長いコメントの色を薄く
                     maxHeight: "100px", // 高さ制限を設けて超えた部分を非表示に
                     transition: "color 0.3s",
                   }}
@@ -129,8 +157,12 @@ const HomePage: FC = () => {
 
       {/* 【特定のユーザーからのおすすめおトイレ】 */}
       <div className="max-w-5xl mx-auto mt-24 px-5">
-        <h2 className="font-bold text-2xl">特定のユーザーからのおすすめおトイレ</h2>
-        <p className="text-md text-gray-600 mt-1">人気ユーザーの最高評価のおトイレです。</p>
+        <h2 className="font-bold text-2xl">
+          特定のユーザーからのおすすめおトイレ
+        </h2>
+        <p className="text-md text-gray-600 mt-1">
+          人気ユーザーの最高評価のおトイレです。
+        </p>
         <div className="mt-5 bg-gray-100 rounded-3xl p-3 md:p-0">
           <div className="p-4">
             <div className="md:flex items-center space-x-4">
@@ -140,12 +172,14 @@ const HomePage: FC = () => {
               <div className="mt-4 md:mt-0 basis-4/6">
                 <p className="font-bold text-gray-800">ユーザー名 山田</p>
                 <p className="mt-2 text-gray-600 font-medium">
-                  El santuario de Tofino: playas afables, senderos copiosos y un atardecer mágico
+                  El santuario de Tofino: playas afables, senderos copiosos y un
+                  atardecer mágico
                 </p>
                 <p className="mt-1 text-gray-600">
-                  Guía completa para explorar Tofino que incluye lugares donde alojarse, comer,
-                  emprender aventuras y ver atardeceres. Conecta con los espectaculares paisajes
-                  costeros, los bosques apacibles y la majestuosa vida silvestre de esta ciudad
+                  Guía completa para explorar Tofino que incluye lugares donde
+                  alojarse, comer, emprender aventuras y ver atardeceres.
+                  Conecta con los espectaculares paisajes costeros, los bosques
+                  apacibles y la majestuosa vida silvestre de esta ciudad
                   costera canadiense de la costa
                 </p>
               </div>
@@ -161,7 +195,9 @@ const HomePage: FC = () => {
       <div className="mt-24 py-8 px-6">
         <div className="w-fit mx-auto">
           <h2 className="font-bold text-2xl">渋谷区おすすめおトイレ</h2>
-          <p className="text-md text-gray-600 mt-1">渋谷区の評価が高い順のトイレ一覧です。</p>
+          <p className="text-md text-gray-600 mt-1">
+            渋谷区の評価が高い順のトイレ一覧です。
+          </p>
           <ul className="custom-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 break-words mt-5">
             {filteredToilets.map((toilet) => (
               <li
@@ -172,7 +208,11 @@ const HomePage: FC = () => {
 
                 <img
                   className="mb-2 border border-gray-300 rounded-lg w-full h-40 object-cover"
-                  src={toilet.imgUrl ? `http://localhost:5000/${toilet.imgUrl}` : `/no-image.png`}
+                  src={
+                    toilet.imgUrl
+                      ? `http://localhost:5000/${toilet.imgUrl}`
+                      : `/no-image.png`
+                  }
                   alt="投稿画像"
                 />
 
@@ -182,7 +222,10 @@ const HomePage: FC = () => {
                 <div
                   className="text-lg mb-2 overflow-hidden break-words"
                   style={{
-                    color: toilet.comment.length > 150 ? "rgba(0, 0, 0, 0.6)" : "black", // 長いコメントの色を薄く
+                    color:
+                      toilet.comment.length > 150
+                        ? "rgba(0, 0, 0, 0.6)"
+                        : "black", // 長いコメントの色を薄く
                     maxHeight: "100px", // 高さ制限を設けて超えた部分を非表示に
                     transition: "color 0.3s",
                   }}
@@ -211,7 +254,9 @@ const HomePage: FC = () => {
       <div className="mt-24 mb-20 custom-bg-color-01 py-8 px-6">
         <div className="w-fit mx-auto">
           <h2 className="font-bold text-2xl">新宿区おすすめおトイレ</h2>
-          <p className="text-md text-gray-600 mt-1">新宿区の評価が高い順のトイレ一覧です。</p>
+          <p className="text-md text-gray-600 mt-1">
+            新宿区の評価が高い順のトイレ一覧です。
+          </p>
           <ul className="custom-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 break-words mt-5">
             {filteredToilets.map((toilet) => (
               <li
@@ -222,7 +267,11 @@ const HomePage: FC = () => {
 
                 <img
                   className="mb-2 border border-gray-300 rounded-lg w-full h-40 object-cover"
-                  src={toilet.imgUrl ? `http://localhost:5000/${toilet.imgUrl}` : `/no-image.png`}
+                  src={
+                    toilet.imgUrl
+                      ? `http://localhost:5000/${toilet.imgUrl}`
+                      : `/no-image.png`
+                  }
                   alt="投稿画像"
                 />
 
@@ -232,7 +281,10 @@ const HomePage: FC = () => {
                 <div
                   className="text-lg mb-2 overflow-hidden break-words"
                   style={{
-                    color: toilet.comment.length > 150 ? "rgba(0, 0, 0, 0.6)" : "black", // 長いコメントの色を薄く
+                    color:
+                      toilet.comment.length > 150
+                        ? "rgba(0, 0, 0, 0.6)"
+                        : "black", // 長いコメントの色を薄く
                     maxHeight: "100px", // 高さ制限を設けて超えた部分を非表示に
                     transition: "color 0.3s",
                   }}

@@ -5,6 +5,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000; // 環境変数があれば、それを使い、無ければデフォルトで5000
 const cors = require('cors');
+const cookieParser = require('cookie-parser'); // リクエストに含まれるクッキーを解析できるように
+
 const initializeDatabase = require('./db/initializeDatabase');
 
 require('dotenv').config();
@@ -23,6 +25,9 @@ app.use(cors({
   credentials: true, //クッキーを許可
 }));
 
+// クッキーを解析するミドルウェアを使う
+app.use(cookieParser());
+
 //************************************************************************************************
 
 //【初期化関数】
@@ -36,12 +41,14 @@ const initialize = async () => {
     const listRouter = require('./routes/list')(db); // 投稿一覧ルーター
     const registerRouter = require('./routes/register')(db); // ユーザー新規登録ルーター
     const loginRouter = require('./routes/login')(db); // ユーザーログインルーター
+    const verifyTokenRouter = require('./routes/verify-token'); // トークン検証ルーターのインポート
 
     // 【ルーターをアプリに追加】
     app.use('/post', postRouter); //投稿機能
     app.use('/list', listRouter); //投稿一覧機能
     app.use('/register', registerRouter); //ユーザーの新規登録機能
     app.use('/login', loginRouter); //ユーザーのログイン機能
+    app.use('/verify-token', verifyTokenRouter); // トークン検証機能を追加
 
   } catch (err) {
     console.error("初期化中にエラー発生!:", err);
