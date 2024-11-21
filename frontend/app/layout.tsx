@@ -1,12 +1,16 @@
+//【最上位のコンポーネント】
+
 "use client";
 
 import { Inter } from "next/font/google";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./globals.css";
-import Header from "./components/organisms/Header";
-import Footer from "./components/organisms/Footer";
+import Header from "./_components/organisms/Header";
+import Footer from "./_components/organisms/Footer";
+import { RecoilRoot } from "recoil";
+import AuthInitializer from "./_components/templates/AuthInitializer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${inter.className} custom-bg min-h-screen flex flex-col`}>
+      <body
+        className={`${inter.className} custom-bg min-h-screen flex flex-col`}
+      >
+        <RecoilRoot>
+          <AuthInitializer />
           <Header />
-
           <ToastContainer
             position="top-center"
             autoClose={3000}
@@ -29,11 +36,20 @@ export default function RootLayout({
             pauseOnHover
             draggable
           />
-
           {children}
-
           <Footer />
+        </RecoilRoot>
       </body>
     </html>
   );
-}
+};
+
+
+//ログイン状態の初期化:
+// AuthInitializerがアプリ起動時にトークンを検証して、RecoilのauthStateを更新。
+
+// Recoilのグローバル管理:
+// HeaderではuseRecoilValue(authState)を使うことで、常に最新のisLoggedIn状態を参照可能。
+
+// APIの柔軟性:
+// サーバーサイドでHttpOnlyクッキーを使ったトークン管理をしてるから、セキュリティも問題なし。

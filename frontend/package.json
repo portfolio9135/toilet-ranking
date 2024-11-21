@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
     "react-rating-stars-component": "^2.2.0",
-    "react-toastify": "^10.0.6"
+    "react-toastify": "^10.0.6",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,3 +1,5 @@
+//【ヘッダー】
+
 "use client";
 
 import React, { FC, useState, memo, useEffect } from "react";
@@ -6,12 +8,16 @@ import Link from "next/link";
 import MenuIconButton from "../atoms/button/MenuIconButton";
 import MenuDrawer from "../molecules/MenuDrawer";
 import LoginButton from "../atoms/button/LoginButton";
+import { useRecoilValue } from "recoil";
+import { authState } from "../atoms/store/authState";
 
 const Header: FC = memo(() => {
   //********************************************************************************************
   //【状態変数まとめ】
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const { isLoggedIn } = useRecoilValue(authState);
 
   //********************************************************************************************
   //【関数まとめ】
@@ -86,7 +92,11 @@ const Header: FC = memo(() => {
         </div>
 
         <div className="hidden md:block">
-          <LoginButton href="/login" label="ログイン" />
+          {isLoggedIn ? (
+            <LoginButton label="ログアウト" />
+          ) : (
+            <LoginButton href="/login" label="ログイン" />
+          )}
         </div>
 
         <MenuIconButton isOpen={isOpen} toggleMenu={toggleMenu} />
