@@ -5,11 +5,12 @@
 import React, { FC, useState, memo, useEffect } from "react";
 import Link from "next/link";
 
-import MenuIconButton from "../atoms/button/MenuIconButton";
+import HamburgerMenuIconBtn from "../atoms/button/HamburgerMenuIconBtn";
 import MenuDrawer from "../molecules/MenuDrawer";
-import LoginButton from "../atoms/button/LoginButton";
-import { useRecoilValue } from "recoil";
-import { authState } from "../atoms/store/authState";
+import PrimaryBtn from "../atoms/button/PrimaryBtn";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authState } from "../../_store/authState";
+import { toast } from "react-toastify";
 
 const Header: FC = memo(() => {
   //********************************************************************************************
@@ -18,6 +19,7 @@ const Header: FC = memo(() => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const { isLoggedIn } = useRecoilValue(authState);
+  const resetAuthState = useSetRecoilState(authState);
 
   //********************************************************************************************
   //【関数まとめ】
@@ -30,18 +32,38 @@ const Header: FC = memo(() => {
   //初期レンダリング時の関数: スクロール検知
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 0); // スクロール量を見てヘッダーの状態を切り替える
     };
-
-    window.addEventListener("scroll", handleScroll);
+  
+    window.addEventListener("scroll", handleScroll); // スクロールイベントを監視
+  
     return () => {
-      window.addEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll); // クリーンアップで監視解除
     };
-  }, []);
+  }, []);  
+
+  //ログアウト関数
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/logout', {
+        method: "POST",
+        credentials: 'include',
+      });
+
+      if(response.ok) {
+        resetAuthState({
+          isLoggedIn: false,
+          user: null,
+        });
+        toast.success("ログアウトしました");
+      } else {
+        toast.error("ログイン失敗しました");
+      }
+    } catch(err) {
+      console.error('ログアウト中にエラー発生:', err);
+      toast.error("ログイン中にエラー発生!");
+    }
+  }
 
   //********************************************************************************************
   //【HTML部分】
@@ -93,13 +115,13 @@ const Header: FC = memo(() => {
 
         <div className="hidden md:block">
           {isLoggedIn ? (
-            <LoginButton label="ログアウト" />
+            <PrimaryBtn label="ログアウト" onClick={handleLogout} />
           ) : (
-            <LoginButton href="/login" label="ログイン" />
+            <PrimaryBtn href="/login" label="ログイン" />
           )}
         </div>
 
-        <MenuIconButton isOpen={isOpen} toggleMenu={toggleMenu} />
+        <HamburgerMenuIconBtn isOpen={isOpen} toggleMenu={toggleMenu} />
       </nav>
 
       <MenuDrawer isOpen={isOpen} />

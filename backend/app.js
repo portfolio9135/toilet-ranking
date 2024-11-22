@@ -41,6 +41,7 @@ const initialize = async () => {
     const listRouter = require('./routes/list')(db); // 投稿一覧ルーター
     const registerRouter = require('./routes/register')(db); // ユーザー新規登録ルーター
     const loginRouter = require('./routes/login')(db); // ユーザーログインルーター
+    const logoutRouter = require('./routes/logout'); // ユーザーログアウトルーター
     const verifyTokenRouter = require('./routes/verify-token'); // トークン検証ルーターのインポート
 
     // 【ルーターをアプリに追加】
@@ -48,6 +49,7 @@ const initialize = async () => {
     app.use('/list', listRouter); //投稿一覧機能
     app.use('/register', registerRouter); //ユーザーの新規登録機能
     app.use('/login', loginRouter); //ユーザーのログイン機能
+    app.use('/logout', logoutRouter); //ユーザーのログアウト機能
     app.use('/verify-token', verifyTokenRouter); // トークン検証機能を追加
 
   } catch (err) {

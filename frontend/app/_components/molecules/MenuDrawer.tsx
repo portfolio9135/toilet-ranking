@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { FC, memo } from "react";
-import LoginButton from "../atoms/button/LoginButton";
+import LoginButton from "../atoms/button/PrimaryBtn";
 
 type Props = {
   isOpen: boolean;

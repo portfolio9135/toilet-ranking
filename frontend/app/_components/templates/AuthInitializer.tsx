@@ -3,7 +3,7 @@
 
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { authState } from "../atoms/store/authState";
+import { authState } from "../../_store/authState";
 
 const AuthInitializer = () => {
   //********************************************************************************************
@@ -49,7 +49,7 @@ const AuthInitializer = () => {
     };
 
     verifyToken();
-  }, [setAuthState]);
+  }, []);
 
   return null; //描画は不要
 };
