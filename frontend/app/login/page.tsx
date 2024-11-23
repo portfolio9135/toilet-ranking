@@ -51,7 +51,9 @@ const LoginPage = () => {
 
       if (response.ok) {
         toast.success("ログイン成功しました");
-        router.push("/");
+
+        // ページ全体をリロードする
+        window.location.href = "/";
       } else {
         toast.error("ログイン失敗しました！");
         setError(data.error || "ログインに失敗しました！");

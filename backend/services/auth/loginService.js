@@ -12,7 +12,6 @@ const loginUser = async (email, password, db) => {
     }
 
     const match = await bcryptjs.compare(password, rows[0].password);
-    console.log(`これがrows[0].passwordですーーー 【${rows[0].password}】`);
 
     //パスが一致してない場合
     if (!match) {
@@ -34,8 +33,6 @@ const loginUser = async (email, password, db) => {
     }
 
     const token = jwt.sign(payload, jwtConfig.secret, jwtConfig.options);
-
-    console.log(`これがtokenですーーー 【${token}】`);
 
     return token;
   } catch (err) {
