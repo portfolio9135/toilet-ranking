@@ -25,25 +25,25 @@ export default function RootLayout({
         className={`${inter.className} custom-bg min-h-screen flex flex-col`}
       >
         <RecoilRoot>
-          <AuthInitializer />
-          <Header />
-          <ToastContainer
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            pauseOnHover
-            draggable
-          />
-          {children}
-          <Footer />
+          <AuthInitializer>
+            <Header />
+            <ToastContainer
+              position="top-center"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              pauseOnHover
+              draggable
+            />
+            {children}
+            <Footer />
+          </AuthInitializer>
         </RecoilRoot>
       </body>
     </html>
   );
-};
-
+}
 
 //ログイン状態の初期化:
 // AuthInitializerがアプリ起動時にトークンを検証して、RecoilのauthStateを更新。

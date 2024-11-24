@@ -4,7 +4,8 @@
 import React, { FC, useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import Search from "./_components/molecules/Search";
-import chalk from "chalk";
+import { useRecoilValue } from "recoil";
+import { authState } from "./_store/authState";
 
 interface Toilet {
   id: number;
@@ -20,37 +21,10 @@ const TopPage: FC = () => {
   //【状態変数まとめ】
 
   const [toilets, setToilets] = useState<Toilet[]>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {isLoggedIn} = useRecoilValue(authState);
 
   //********************************************************************************************
   //【関数まとめ】
-
-  //【トークンの検証を行うAPIリクエスト非同期関数】
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/verify-token", {
-          method: "GET",
-          credentials: "include", // クッキーも送信する
-        });
-
-        const result = await response.json();
-        if (result.isLoggedIn) {
-          setIsLoggedIn(true);
-
-          console.log(chalk.blue(`resultの値はこれですよーーーーー 【 ${result} 】`));
-          console.log(result);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error("トークン検証エラー:", error);
-        setIsLoggedIn(false);
-      }
-    };
-
-    verifyToken();
-  }, []);
 
   // 【すべてのトイレデータを取得する関数】
   useEffect(() => {
@@ -74,15 +48,15 @@ const TopPage: FC = () => {
 
   // 【isLoggedInが変わったときにログを出すuseEffect】
   useEffect(() => {
-    console.log(chalk.green(`isLoggedInの値はこれですよーーーーー 【 ${isLoggedIn} 】`));
+    console.log(`isLoggedInの値はこれですよーーーーー 【 ${isLoggedIn} 】`);
   }, [isLoggedIn]);
 
   // 【評価が5の投稿だけにフィルタリングする関数】
   const filteredToilets = toilets.filter((toilet) => toilet.rating === 5);
 
   //********************************************************************************************
-
   //【ここからHTML部分】
+
   return (
     <div className="custom-bg min-h-screen pt-20">
       {/* タイトルテキスト */}

@@ -41,12 +41,7 @@ const Header: FC = memo(() => {
       window.removeEventListener("scroll", handleScroll); // クリーンアップで監視解除
     };
   }, []);  
-
-  useEffect(() => {
-    console.log(`isLoggedInの値はこれですーーーーー${isLoggedIn}`);
-  }, []);  
   
-
   //ログアウト関数
   const handleLogout = async () => {
     try {
