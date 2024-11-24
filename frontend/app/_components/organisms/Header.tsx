@@ -42,6 +42,11 @@ const Header: FC = memo(() => {
     };
   }, []);  
 
+  useEffect(() => {
+    console.log(`isLoggedInの値はこれですーーーーー${isLoggedIn}`);
+  }, []);  
+  
+
   //ログアウト関数
   const handleLogout = async () => {
     try {

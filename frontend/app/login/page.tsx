@@ -3,9 +3,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authState } from "../_store/authState";
 
 const LoginPage = () => {
   //********************************************************************************************
@@ -18,7 +20,9 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { isLoggedIn } = useRecoilValue(authState);
 
+  const setAuthState = useSetRecoilState(authState);
   //********************************************************************************************
   //【関数まとめ】
 
@@ -50,10 +54,15 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("ログイン成功しました");
+        toast.success("ログイン成功しました!");
 
-        // ページ全体をリロードする
-        window.location.href = "/";
+        // RecoilのauthStateを更新してisLoggedInをtrueにする
+        setAuthState({
+          isLoggedIn: true,
+          user: data.user, // サーバーから返ってきたユーザー情報（例）
+        });
+
+        router.push('/');
       } else {
         toast.error("ログイン失敗しました！");
         setError(data.error || "ログインに失敗しました！");
@@ -72,7 +81,9 @@ const LoginPage = () => {
   return (
     <div className="flex-grow p-24 md:p-24">
       <div className="max-w-md mx-auto bg-gray-100 p-6 shadow-lg rounded-lg mt-10">
-        <h2 className="text-2xl font-semibold text-center text-gray-800">ログイン</h2>
+        <h2 className="text-2xl font-semibold text-center text-gray-800">
+          ログイン
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-6">
           {error && <div className="text-red-500 text-center">{error}</div>}
