@@ -58,12 +58,10 @@ const LoginPage = () => {
         // RecoilのauthStateを更新してisLoggedInをtrueにする
         setAuthState({
           isLoggedIn: true,
-          user: data.user, // サーバーから返ってきたユーザー情報（例）
+          user: data.user, // サーバーから返ってきたユーザー情報
         });
-
-        console.log(`data.userの情報はこれですーーーーー${data.user}`);
         
-        router.push('/');
+        window.location.href = "/";
       } else {
         toast.error("ログイン失敗しました！");
         setError(data.error || "ログインに失敗しました！");

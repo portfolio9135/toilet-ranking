@@ -1,18 +1,18 @@
 import Link from "next/link";
 import React, { FC, memo } from "react";
-import LoginButton from "../atoms/button/PrimaryBtn";
+import PrimaryBtn from "../atoms/button/PrimaryBtn";
 
 type Props = {
-  isOpen: boolean;
+  isHamburgerMenuOpen: boolean;
 };
 
-const MenuDrawer: FC<Props> = memo((props) => {
-  const { isOpen } = props;
+const HamburgerMenuDrawer: FC<Props> = memo((props) => {
+  const { isHamburgerMenuOpen } = props;
 
   return (
     <div
       className={`fixed left-0 w-full h-full bg-gray-100 transform transition-transform duration-300 ${
-        isOpen ? "-translate-x-0" : "-translate-x-full"
+        isHamburgerMenuOpen ? "-translate-x-0" : "-translate-x-full"
       } md:hidden w-4/5`}
       style={{ top: "64px" }}
     >
@@ -40,13 +40,13 @@ const MenuDrawer: FC<Props> = memo((props) => {
         </Link>
 
         <div className="py-6">
-          <LoginButton />
+          <PrimaryBtn label="ログイン" />
         </div>
       </div>
     </div>
   );
 });
 
-MenuDrawer.displayName = "MenuDrawer";
+HamburgerMenuDrawer.displayName = "HamburgerMenuDrawer";
 
-export default MenuDrawer;
+export default HamburgerMenuDrawer;

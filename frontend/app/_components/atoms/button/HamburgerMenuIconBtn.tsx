@@ -1,20 +1,20 @@
 import React, { FC, memo } from "react";
 
 type Props = {
-  isOpen: boolean;
-  toggleMenu: () => void;
+  isHamburgerMenuOpen: boolean;
+  toggleHamburgerMenuDrawer: () => void;
 };
 
 const MenuIconButton: FC<Props> = memo((props) => {
-  const { isOpen, toggleMenu } = props;
+  const { isHamburgerMenuOpen, toggleHamburgerMenuDrawer } = props;
 
   return (
     <button
       aria-label="メニューボタン"
       className="md:hidden flex items-center justify-center p-2 rounded focus:outline-none"
-      onClick={toggleMenu}
+      onClick={toggleHamburgerMenuDrawer}
     >
-      {isOpen ? (
+      {isHamburgerMenuOpen ? (
         <svg
           className="w-6 h-6"
           fill="none"

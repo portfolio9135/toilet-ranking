@@ -21,7 +21,6 @@ const loginUser = async (email, password, db) => {
     //トークンに含める情報
     const payload = {
       email: rows[0].email,
-      password: rows[0].password,
     };
 
     const jwtConfig = {

@@ -16,12 +16,18 @@ interface Toilet {
   rating: number;
 }
 
+interface AuthState {
+  isLoggedIn: boolean;
+  user: { username: string; email: string; avatar_url: string } | null;
+}
+
+
 const TopPage: FC = () => {
   //********************************************************************************************
   //【状態変数まとめ】
 
   const [toilets, setToilets] = useState<Toilet[]>([]);
-  const {isLoggedIn} = useRecoilValue(authState);
+  const auth = useRecoilValue<AuthState>(authState);
 
   //********************************************************************************************
   //【関数まとめ】
@@ -46,10 +52,13 @@ const TopPage: FC = () => {
     fetchToilets();
   }, []);
 
-  // 【isLoggedInが変わったときにログを出すuseEffect】
+  // 【authが変わったときにログを出すuseEffect】
   useEffect(() => {
-    console.log(`isLoggedInの値はこれですよーーーーー 【 ${isLoggedIn} 】`);
-  }, [isLoggedIn]);
+    console.log(`authの値はこれですよ↓↓↓↓↓↓↓`);
+    console.log(auth);
+
+    // console.log(auth.user.email);
+  }, [auth]);
 
   // 【評価が5の投稿だけにフィルタリングする関数】
   const filteredToilets = toilets.filter((toilet) => toilet.rating === 5);

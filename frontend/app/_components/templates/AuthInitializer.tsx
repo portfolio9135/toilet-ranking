@@ -33,10 +33,12 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
         if (result.isLoggedIn) {
           setAuthState({
             isLoggedIn: true, //ログイン状態をtrueにする
-            user: result.user || null, //必要ならユーザー情報もセット
+            user: result.user
           });
           console.log(chalk.green(`ログイン状態を更新しましたー`));
-          console.log(chalk.green(`resultの中身は--- ${result}です`));
+          console.log(chalk.green(`resultの中身はこれです↓↓↓↓↓`));
+          console.log(result);
+          
         } else {
           setAuthState({
             isLoggedIn: false,

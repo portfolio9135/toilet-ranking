@@ -2,6 +2,7 @@
 //【必要なものをインポート】
 
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 5000; // 環境変数があれば、それを使い、無ければデフォルトで5000
 const cors = require('cors');
@@ -18,6 +19,9 @@ app.use(express.json()); //JSON形式のリクエストボディをJavaScriptの
 
 //'/uploads'にアクセスがあった場合、指定したディレクトリ(uploads)内の全てのファイルを静的に公開する
 app.use('/uploads', express.static('uploads'));
+
+// publicフォルダを静的ファイルとして提供
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 別のオリジン(http://localhost:3000)からのリクエストを許可
 app.use(cors({
@@ -42,7 +46,7 @@ const initialize = async () => {
     const registerRouter = require('./routes/register')(db); // ユーザー新規登録ルーター
     const loginRouter = require('./routes/login')(db); // ユーザーログインルーター
     const logoutRouter = require('./routes/logout'); // ユーザーログアウトルーター
-    const verifyTokenRouter = require('./routes/verify-token'); // トークン検証ルーターのインポート
+    const verifyTokenRouter = require('./routes/verify-token')(db); // トークン検証してユーザー情報返すルーターのインポート
 
     // 【ルーターをアプリに追加】
     app.use('/post', postRouter); //投稿機能
