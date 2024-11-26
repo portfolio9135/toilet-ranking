@@ -1,11 +1,11 @@
-// 【トップページ】
 "use client";
 
 import React, { FC, useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import Search from "./_components/molecules/Search";
-import { useRecoilValue } from "recoil";
-import { authState } from "./_store/authState";
+
+//********************************************************************************************
+//【型定義】
 
 interface Toilet {
   id: number;
@@ -16,21 +16,14 @@ interface Toilet {
   rating: number;
 }
 
-interface AuthState {
-  isLoggedIn: boolean;
-  user: { username: string; email: string; avatar_url: string } | null;
-}
-
-
 const TopPage: FC = () => {
   //********************************************************************************************
-  //【状態変数まとめ】
+  //【状態変数】
 
   const [toilets, setToilets] = useState<Toilet[]>([]);
-  const auth = useRecoilValue<AuthState>(authState);
 
   //********************************************************************************************
-  //【関数まとめ】
+  //【関数】
 
   // 【すべてのトイレデータを取得する関数】
   useEffect(() => {
@@ -40,7 +33,6 @@ const TopPage: FC = () => {
         if (response.ok) {
           const data = await response.json();
           setToilets(data);
-          console.log("トイレの全データ取得成功ですーーーーーー");
         } else {
           console.error("一覧取得失敗!!!:", response.statusText);
         }
@@ -51,14 +43,6 @@ const TopPage: FC = () => {
 
     fetchToilets();
   }, []);
-
-  // 【authが変わったときにログを出すuseEffect】
-  useEffect(() => {
-    console.log(`authの値はこれですよ↓↓↓↓↓↓↓`);
-    console.log(auth);
-
-    // console.log(auth.user.email);
-  }, [auth]);
 
   // 【評価が5の投稿だけにフィルタリングする関数】
   const filteredToilets = toilets.filter((toilet) => toilet.rating === 5);

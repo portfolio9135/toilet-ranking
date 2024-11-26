@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import AboutPage from "./_AboutPage";
 
 const page = () => {
   return (
-    <div className='w-fit mx-auto pt-24 flex-grow'>Aboutページ開発中...</div>
-  )
-}
+    <>
+      <AboutPage />
+    </>
+  );
+};
 
-export default page
+export default page;

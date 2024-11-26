@@ -21,7 +21,8 @@ interface AuthState {
 
 const Header: FC = memo(() => {
   //********************************************************************************************
-  //【状態変数まとめ】
+  //【状態変数】
+
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
   const [isUserInfoDrawerOpen, setIsUserInfoDrawerOpen] = useState(false);
   const [showBlackShadow, setShowBlackShadwo] = useState(false);
@@ -30,11 +31,9 @@ const Header: FC = memo(() => {
 
   const resetAuthState = useSetRecoilState(authState);
   const auth = useRecoilValue<AuthState>(authState);
-  console.log("authの状態:", auth);
-
 
   //********************************************************************************************
-  //【関数まとめ】
+  //【関数】
 
   //【ハンバーガーメニュー】
   const toggleHamburgerMenuDrawer = () => {
@@ -94,6 +93,7 @@ const Header: FC = memo(() => {
       }`}
     >
       <nav className="flex max-w-[1200px] mx-auto items-center justify-between p-3 md:p-5">
+        {/* サイトタイトルとロゴ */}
         <Link
           href="/"
           passHref
@@ -109,6 +109,7 @@ const Header: FC = memo(() => {
           </div>
         </Link>
 
+        {/* ヘッダーのナビゲーションメニュー */}
         <div className="hidden md:flex items-center text-md font-bold">
           <Link
             href="/post"
@@ -133,8 +134,9 @@ const Header: FC = memo(() => {
           </Link>
         </div>
 
+        {/* ユーザーアイコン */}
         <div className="hidden md:block">
-          { auth.isLoggedIn && auth.user ? (
+          {auth.isLoggedIn && auth.user ? (
             <div
               className="flex flex-col items-end"
               onClick={toggleLUserInfoDrawer}
@@ -166,9 +168,10 @@ const Header: FC = memo(() => {
         >
           <div>
             <h2 className="text-lg font-bold text-gray-900">メニュー</h2>
+            <p className="mt-2">こんにちは！{auth.user?.username}さん</p>
             <ul className="text-gray-800">
               <li className="mt-8 hover:opacity-50 cursor-pointer">
-                <a href="/profile">プロフィール</a>
+                <a href="">プロフィール</a>
               </li>
               <li className="mt-8 hover:opacity-50 cursor-pointer">
                 <a href="">設定</a>
@@ -182,6 +185,7 @@ const Header: FC = memo(() => {
           </div>
         </div>
 
+        {/* ハンバーガーメニューボタン */}
         <HamburgerMenuIconBtn
           isHamburgerMenuOpen={isHamburgerMenuOpen}
           toggleHamburgerMenuDrawer={toggleHamburgerMenuDrawer}

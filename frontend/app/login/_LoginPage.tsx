@@ -10,6 +10,8 @@ import { useSetRecoilState } from "recoil";
 import { authState } from "../_store/authState";
 
 const LoginPage = () => {
+  console.log("ログインページがレンダリングされましたーーーーー");
+
   //********************************************************************************************
   //【状態変数まとめ】
 
