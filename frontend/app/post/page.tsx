@@ -3,9 +3,9 @@ import PostPage from './_PostPage'
 
 const page = () => {
   return (
-    <div>
+    <>
       <PostPage />
-    </div>
+    </>
   )
 }
 

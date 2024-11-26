@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import ReactStars from 'react-rating-stars-component';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PostPage = () => {
     console.log("投稿ページがレンダリングされましたーーーーー");
@@ -18,8 +20,6 @@ const PostPage = () => {
   //【投稿した時の関数】
   const handleSubmit = async (e) => {
     e.preventDefault(); //ページのリロードを防ぐ
-
-    console.log("投稿する関数は発火しましたーーーー");
 
     const formData = new FormData();
     formData.append("title", title);
@@ -39,7 +39,8 @@ const PostPage = () => {
 
       if (response.ok) {
         //成功した時の処理
-        console.log("投稿が成功しましたーーーーーーーー！");
+        toast.success("投稿成功しました!");
+
         setTitle("");
         setAddress("");
         setComment("");
