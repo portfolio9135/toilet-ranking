@@ -47,15 +47,16 @@ const initialize = async () => {
     const loginRouter = require('./routes/login')(db); // ユーザーログインルーター
     const logoutRouter = require('./routes/logout'); // ユーザーログアウトルーター
     const verifyTokenRouter = require('./routes/verify-token')(db); // トークン検証してユーザー情報返すルーターのインポート
+    const postDetailRouter = require('./routes/postDetail')(db); // 投稿詳細ルーター
 
     // 【ルーターをアプリに追加】
     app.use('/post', postRouter); //投稿機能
+    app.use('/post', postDetailRouter)//投稿詳細機能
     app.use('/list', listRouter); //投稿一覧機能
     app.use('/register', registerRouter); //ユーザーの新規登録機能
     app.use('/login', loginRouter); //ユーザーのログイン機能
     app.use('/logout', logoutRouter); //ユーザーのログアウト機能
     app.use('/verify-token', verifyTokenRouter); // トークン検証機能を追加
-
   } catch (err) {
     console.error("初期化中にエラー発生!:", err);
   }
