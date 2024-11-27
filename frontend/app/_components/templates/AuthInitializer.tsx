@@ -33,23 +33,32 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
         if (result.isLoggedIn) {
           setAuthState({
             isLoggedIn: true, //ログイン状態をtrueにする
-            user: result.user
+            user: result.user,
           });
           console.log(chalk.green(`ログイン状態を更新しましたー`));
           console.log(chalk.green(`resultの中身はこれです↓↓↓↓↓`));
           console.log(result);
-          
         } else {
           setAuthState({
             isLoggedIn: false,
-            user: null,
+            user: {
+              id: "",
+              email: "",
+              username: "",
+              avatar_url: "",
+            },
           });
         }
       } catch (err) {
         console.error("トークン検証エラー:", err);
         setAuthState({
           isLoggedIn: false,
-          user: null,
+          user: {
+            id: "",
+            email: "",
+            username: "",
+            avatar_url: "",
+          },
         });
       } finally {
         setIsInitialized(true); //初期化完了
@@ -57,7 +66,7 @@ const AuthInitializer = ({ children }: { children: React.ReactNode }) => {
     };
 
     verifyToken();
-  }, []);
+  }, [setAuthState]);
 
   //********************************************************************************************
   //【条件付きレンダリング】

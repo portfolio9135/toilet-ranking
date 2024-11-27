@@ -21,7 +21,7 @@ module.exports = (db) => {
 
       // データベースから追加情報を取得
       const [rows] = await db.execute(
-        "SELECT username, email, avatar_url FROM users WHERE email = ?",
+        "SELECT * FROM users WHERE email = ?",
         [email]
       );
 
@@ -35,8 +35,9 @@ module.exports = (db) => {
       res.status(200).json({
         isLoggedIn: true,
         user: {
-          username: rows[0].username,
+          id: rows[0].id,
           email: rows[0].email,
+          username: rows[0].username,
           avatar_url: rows[0].avatar_url,
         },
       });

@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
-import ReactStars from 'react-rating-stars-component';
-import { toast } from "react-toastify";
+import React, { use, useEffect, useState } from "react";
+import ReactStars from "react-rating-stars-component";
 import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
+import { authState } from "../_store/authState";
+import { GetServerSideProps } from "next";
+import Image from "next/image";
 
 const PostPage = () => {
-    console.log("投稿ページがレンダリングされましたーーーーー");
+  console.log("投稿ページがレンダリングされましたーーーーー");
 
-  //【状態を管理する変数】
+  //【変数】
   const [title, setTitle] = useState("");
   const [img, setImg] = useState<File | null>(null); //File型またはnull
   const [imgPreviewUrl, setImgPreviewUrl] = useState("");
@@ -16,25 +20,47 @@ const PostPage = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
 
+  const currentUser = useRecoilValue(authState);
+  const userId = currentUser?.user.id ?? "";
 
-  //【投稿した時の関数】
-  const handleSubmit = async (e) => {
+  console.log("userIdは", userId);
+
+  //【関数】
+
+  //【画像プレビューのURLを生成した時に発火する関数】
+  useEffect(() => {
+    if (imgPreviewUrl) {
+      // 画像プレビューのURLが生成されたら、不要になったURLを解放する
+      return () => URL.revokeObjectURL(imgPreviewUrl);
+    }
+  }, [imgPreviewUrl]);
+
+  //【投稿送信時に発火する関数】
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //ページのリロードを防ぐ
 
+    // フォームデータを作成
     const formData = new FormData();
+
+    // フォームデータに各値を追加
     formData.append("title", title);
     formData.append("address", address);
     formData.append("comment", comment);
     formData.append("rating", rating.toString()); //数値を文字列に変換して追加
+    formData.append("postingUserId", userId);
 
     if (img !== null) {
       formData.append("img", img);
     }
 
     try {
-      const response = await fetch("http://localhost:5000/post", {
+      const API_BASE_URL = process.env.API_BASE_URL;
+      const response = await fetch(`${API_BASE_URL}/post`, {
         method: "POST",
-        body: formData, //FormDataインスタンスを直接渡す
+        body: JSON.stringify({
+          ...formData,
+          userId,
+        }),
       });
 
       if (response.ok) {
@@ -49,7 +75,8 @@ const PostPage = () => {
         setImgPreviewUrl("");
       } else {
         //エラーハンドリング
-        console.error("投稿に失敗しました!!");
+        const errorData = await response.json();
+        toast.error(`エラーが発生しました！${errorData.message}`);
       }
     } catch (err) {
       console.error("エラーが発生しました！！", err);
@@ -57,31 +84,24 @@ const PostPage = () => {
     }
   };
 
-  //【画像を選択した時の関数】
-  const handleImgChange = (e) => {
-    console.log("handleImgChangeが発火しましたーーーー");
-
-    const file = e.target.files[0];
-
-    console.log(`${file}`);
+  //【画像を選択した時に発火する関数】
+  const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
 
     setImg(file);
 
     // 画像ファイルが選ばれたら、そのURLを生成してプレビューを表示する
     if (file) {
-      const imgPreviewUrl = URL.createObjectURL(file);
-      console.log(`これがimgPreviewUrlですよーー${imgPreviewUrl}`);
-
-      setImgPreviewUrl(imgPreviewUrl);
+      setImgPreviewUrl(URL.createObjectURL(file));
     } else {
       setImgPreviewUrl("");
     }
   };
 
-  //【星の評価をした時の関数】
-  const handleRatingChange = (newRating) => {
+  //【星の評価をした時に発火する関数】
+  const handleRatingChange = (newRating: number) => {
     setRating(newRating);
-  }
+  };
 
   //【HTML部分】
   return (
@@ -107,7 +127,7 @@ const PostPage = () => {
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#e0f7f5] file:text-[#03c1ab] hover:file:bg-[#ccf0eb]"
             />
             {imgPreviewUrl && (
-              <img
+              <Image
                 src={imgPreviewUrl}
                 alt="画像プレビュー"
                 className="mt-4 max-w-full h-auto rounded-lg shadow-md"
@@ -157,6 +177,23 @@ const PostPage = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const token = context.req.cookies.token;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default PostPage;

@@ -18,8 +18,7 @@ const createTablesIfNotExists = async () => {
   const db = await mysql.createConnection(dbConfig);
 
   try {
-    //テーブルを作成するためのSQLクエリを定義している部分。
-    //このクエリは、toiletという名前のテーブルを作成するもので、以下のカラムを持ってる
+    // 【投稿したトイレのテーブル】
     const createToiletsTableQuery = `
       CREATE TABLE IF NOT EXISTS toilets (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -27,12 +26,14 @@ const createTablesIfNotExists = async () => {
         imgUrl VARCHAR(255),
         address VARCHAR(255) NOT NULL,
         comment VARCHAR(255),
-        rating FLOAT NOT NULL
+        rating FLOAT NOT NULL,
+        postingUserId INT NOT NULL
       ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     `;
     await db.execute(createToiletsTableQuery);
     console.log(`テーブルを作成しましたーーーーーーーーーーーーー【テーブル名: toilets】`);
 
+    // 【登録してるユーザーのテーブル】
     const createUserTableQuery = `
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,

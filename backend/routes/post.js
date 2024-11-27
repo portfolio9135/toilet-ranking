@@ -8,14 +8,36 @@ module.exports = (db) => {
 
   // 投稿API
   router.post('/', upload.single('img'), async (req, res) => {
+
+    // リクエストボディからデータを取得
     const { title, address, comment, rating } = req.body;
-    const imgUrl = req.file ? req.file.path : ""; // 画像がある場合はパスを取得なければ空文字
+
+    // 画像のパスを取得
+    const imgUrl = req.file ? req.file.path : "";
+
+    // トークンを取得
+    const token = req.headers.authorization.split(' ')[1];
+    console.log("トークンの取得に成功しましたーーーーーー");
+
+    if(!token) {
+      console.log("トークンの取得に失敗しました！！！");
+      return res.status(401).json({ error: 'トークンがありません' });
+    }
 
     try {
+      // トークンを検証
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // ユーザーIDを取得
+      const postingUserId = decoded.id;
+
+      // データベースに投稿情報とユーザーIDを挿入
       const [result] = await db.query(
-        'INSERT INTO toilets (title, address, comment, rating, imgUrl) VALUES (?, ?, ?, ?, ?)',
-        [title, address, comment, rating, imgUrl]
+        'INSERT INTO toilets (title, address, comment, rating, imgUrl, postingUserId) VALUES (?, ?, ?, ?, ?, ?)',
+        [title, address, comment, rating, imgUrl, postingUserId]
       );
+
+      // レスポンスを返す
       res.status(201).json({ message: '投稿成功', data: result });
       console.log("データの挿入に成功しましたーーーーーー");
     } catch (error) {
