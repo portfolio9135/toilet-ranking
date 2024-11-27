@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
@@ -8,22 +8,23 @@ import { useRecoilValue } from "recoil";
 import { authState } from "../_store/authState";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const PostPage = () => {
   console.log("投稿ページがレンダリングされましたーーーーー");
 
   //【変数】
+  const router = useRouter();
+
   const [title, setTitle] = useState("");
   const [img, setImg] = useState<File | null>(null); //File型またはnull
   const [imgPreviewUrl, setImgPreviewUrl] = useState("");
   const [address, setAddress] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
+  const [userId, setUserId] = useState("");
 
   const currentUser = useRecoilValue(authState);
-  const userId = currentUser?.user.id ?? "";
-
-  console.log("userIdは", userId);
 
   //【関数】
 
@@ -34,6 +35,13 @@ const PostPage = () => {
       return () => URL.revokeObjectURL(imgPreviewUrl);
     }
   }, [imgPreviewUrl]);
+
+  //【ユーザーIDをセットする関数】
+  useEffect(() => {
+    if (currentUser?.user?.id) {
+      setUserId(currentUser.user.id);
+    }
+  }, [currentUser]);
 
   //【投稿送信時に発火する関数】
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,13 +62,10 @@ const PostPage = () => {
     }
 
     try {
-      const API_BASE_URL = process.env.API_BASE_URL;
+      const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5000";
       const response = await fetch(`${API_BASE_URL}/post`, {
         method: "POST",
-        body: JSON.stringify({
-          ...formData,
-          userId,
-        }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -73,6 +78,8 @@ const PostPage = () => {
         setRating(0);
         setImg(null);
         setImgPreviewUrl("");
+
+        router.push("/");
       } else {
         //エラーハンドリング
         const errorData = await response.json();
@@ -130,6 +137,8 @@ const PostPage = () => {
               <Image
                 src={imgPreviewUrl}
                 alt="画像プレビュー"
+                width={200}
+                height={200}
                 className="mt-4 max-w-full h-auto rounded-lg shadow-md"
               />
             )}

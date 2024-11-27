@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactStars from "react-rating-stars-component";
+import { useRecoilValue } from "recoil";
+import { authState } from "../_store/authState";
+import Image from "next/image";
 
 interface Toilet {
   id: number;
@@ -11,10 +14,14 @@ interface Toilet {
   address: string;
   comment: string;
   rating: number;
+  postingUserId: string;
 }
 
-const PostListPage: FC = () => {
+const PostListPage = () => {
   console.log("投稿一覧ページがレンダリングされましたーーーーー");
+  const currentUser = useRecoilValue(authState);
+  console.log("currentUserの中身はこれです↓↓↓↓↓");
+  console.log(currentUser);
 
   const [toilets, setToilets] = useState<Toilet[]>([]);
 
@@ -40,9 +47,7 @@ const PostListPage: FC = () => {
   return (
     <div className="pt-28">
       <div className="max-w-[1280px] mx-auto">
-        <h2 className="font-bold text-2xl mb-6 mx-auto w-fit">
-          投稿されたトイレの一覧
-        </h2>
+        <h2 className="font-bold text-2xl mb-6 mx-auto w-fit">投稿されたトイレの一覧</h2>
         <ul className="custom-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 break-words">
           {toilets.map((toilet) => (
             <li
@@ -53,18 +58,16 @@ const PostListPage: FC = () => {
                 {/* 投稿タイトル */}
                 <div className="text-lg font-bold mb-2">{toilet.title}</div>
 
-                {/* 投稿画像サムネイル */}
-                <img
-                  className="mb-2 border border-gray-300 rounded-lg w-full h-40 object-cover"
-                  src={
-                    toilet.imgUrl
-                      ? `http://localhost:5000/${toilet.imgUrl}`
-                      : `/no-image.png`
-                  }
-                  alt="投稿画像"
-                />
+                <div className="text-lg font-bold mb-2">{toilet.postingUserId}</div>
 
-                <img src="" alt="" />
+                {/* 投稿画像サムネイル */}
+                <Image
+                  src={toilet.imgUrl ? `http://localhost:5000/${toilet.imgUrl}` : `/no-image.png`}
+                  alt="投稿画像"
+                  width={500} // 必須プロパティ: 固定の幅
+                  height={300} // 必須プロパティ: 固定の高さ
+                  unoptimized // 開発環境で最適化を無効にする場合に使用
+                />
 
                 {/* 住所 */}
                 <div className="text-lg font-bold mb-2">{toilet.address}</div>
@@ -73,10 +76,7 @@ const PostListPage: FC = () => {
                 <div
                   className="text-lg mb-2 overflow-hidden break-words"
                   style={{
-                    color:
-                      toilet.comment.length > 150
-                        ? "rgba(0, 0, 0, 0.6)"
-                        : "black", // 長いコメントの色を薄く
+                    color: toilet.comment.length > 150 ? "rgba(0, 0, 0, 0.6)" : "black", // 長いコメントの色を薄く
                     maxHeight: "100px", // 高さ制限を設けて超えた部分を非表示に
                     transition: "color 0.3s",
                   }}
