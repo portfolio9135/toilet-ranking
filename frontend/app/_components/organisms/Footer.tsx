@@ -4,7 +4,7 @@ import { FC, memo } from "react";
 
 const Footer: FC = memo(() => {
   return (
-    <footer className="bg-gray-100">
+    <footer className="bg-gray-100 mt-16">
       <div className="p-8 max-w-[1024px] mx-auto">
         <div className="md:flex">
           <div className="text-gray-600 mb-8 mr-12 md:mb-0">

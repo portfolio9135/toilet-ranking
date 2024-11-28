@@ -10,7 +10,8 @@ const LoginButton: FC<LoginButtonProps> = ({ onClick, href, label }) => {
   return href ? (
     <a href={href}>
       <button
-        className={`font-bold bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-200`}
+        onClick={onClick}
+        className={`font-bold bg-gradient-to-r from-[#03c1ab] to-[#02a38a] text-white py-2 px-4 rounded-full hover:opacity-80 transition duration-500`}
       >
         {label}
       </button>
@@ -18,7 +19,7 @@ const LoginButton: FC<LoginButtonProps> = ({ onClick, href, label }) => {
   ) : (
     <button
       onClick={onClick}
-      className={`font-bold bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-200`}
+      className={`font-bold bg-gradient-to-r from-[#03c1ab] to-[#02a38a] text-white py-2 px-4 rounded-full hover:opacity-80 transition duration-500`}
     >
       {label}
     </button>

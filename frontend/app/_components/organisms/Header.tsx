@@ -69,6 +69,7 @@ const Header: FC = memo(() => {
         toast.success("ログアウトしました");
         setIsUserInfoDrawerOpen(false);
         setShowBlackShadwo(false);
+        window.location.href = "/";
       } else {
         toast.error("ログイン失敗しました");
       }
@@ -94,17 +95,9 @@ const Header: FC = memo(() => {
     >
       <nav className="flex max-w-[1200px] mx-auto items-center justify-between p-3 md:p-5">
         {/* サイトタイトルとロゴ */}
-        <Link
-          href="/"
-          passHref
-          className="mr-8 hover:cursor-pointer hover:opacity-80"
-        >
+        <Link href="/" passHref className="mr-8 hover:cursor-pointer hover:opacity-80">
           <div className="flex items-center">
-            <img
-              className=" rounded-full w-9 mr-3"
-              src="/favicon.png"
-              alt="タイトルアイコン画像"
-            />
+            <img className=" rounded-full w-9 mr-3" src="/favicon.png" alt="タイトルアイコン画像" />
             <h1 className="text-md md:text-lg font-bold">おトイレランキング</h1>
           </div>
         </Link>
@@ -137,10 +130,7 @@ const Header: FC = memo(() => {
         {/* ユーザーアイコン */}
         <div className="hidden md:block">
           {auth.isLoggedIn && auth.user ? (
-            <div
-              className="flex flex-col items-end"
-              onClick={toggleLUserInfoDrawer}
-            >
+            <div className="flex flex-col items-end" onClick={toggleLUserInfoDrawer}>
               <img
                 src={`http://localhost:5000/${auth.user.avatar_url}`}
                 className="w-16"
@@ -170,14 +160,18 @@ const Header: FC = memo(() => {
             <h2 className="text-lg font-bold text-gray-900">メニュー</h2>
             <p className="mt-2">こんにちは！{auth.user?.username}さん</p>
             <ul className="text-gray-800">
-              <li className="mt-8 hover:opacity-50 cursor-pointer">
-                <a href="">プロフィール</a>
+              <li className="mt-8">
+                <a href="" className="hover:opacity-50 cursor-pointer">
+                  プロフィール
+                </a>
               </li>
-              <li className="mt-8 hover:opacity-50 cursor-pointer">
-                <a href="">設定</a>
+              <li className="mt-8">
+                <a href="" className="hover:opacity-50 cursor-pointer">
+                  設定
+                </a>
               </li>
               <li className="mt-2">
-                <div className="py-6 hover:opacity-50 cursor-pointer">
+                <div className="mt-8">
                   <PrimaryBtn label="ログアウト" onClick={handleLogout} />
                 </div>
               </li>

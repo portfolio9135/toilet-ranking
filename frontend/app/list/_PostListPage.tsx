@@ -15,6 +15,7 @@ interface Toilet {
   comment: string;
   rating: number;
   postingUserId: string;
+  postingUserName: string;
 }
 
 const PostListPage = () => {
@@ -45,20 +46,18 @@ const PostListPage = () => {
   }, []);
 
   return (
-    <div className="pt-28">
+    <>
       <div className="max-w-[1280px] mx-auto">
         <h2 className="font-bold text-2xl mb-6 mx-auto w-fit">投稿されたトイレの一覧</h2>
         <ul className="custom-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 break-words">
           {toilets.map((toilet) => (
             <li
               key={toilet.id}
-              className="bg-white shadow-md rounded-lg p-6 w-80 border border-gray-300 border-y-2 border-x-2 flex flex-col h-[450px] transform transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+              className="bg-white shadow-md rounded-lg p-6 w-80 border border-gray-300 border-y-2 border-x-2 flex flex-col transform transition-transform duration-300 hover:scale-105 hover:shadow-xl"
             >
               <Link href={`/post/${toilet.id}`}>
                 {/* 投稿タイトル */}
                 <div className="text-lg font-bold mb-2">{toilet.title}</div>
-
-                <div className="text-lg font-bold mb-2">{toilet.postingUserId}</div>
 
                 {/* 投稿画像サムネイル */}
                 <Image
@@ -86,8 +85,12 @@ const PostListPage = () => {
                     : toilet.comment}
                 </div>
 
+                <div>
+                  投稿者: {toilet.postingUserName}
+                </div>
+
                 {/* 星の評価 */}
-                <div className="mt-auto relative z-0">
+                <div>
                   <ReactStars
                     count={5}
                     size={24}
@@ -101,7 +104,7 @@ const PostListPage = () => {
           ))}
         </ul>
       </div>
-    </div>
+    </>
   );
 };
 

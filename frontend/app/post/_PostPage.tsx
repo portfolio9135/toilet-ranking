@@ -121,10 +121,10 @@ const PostPage = () => {
 
   //【HTML部分】
   return (
-    <div className="p-4  md:p-24">
-      <h1 className="text-3xl font-bold mb-8 mx-auto w-fit">おトイレの投稿ページ</h1>
+    <>
+      <h1 className="text-3xl font-bold mx-auto w-fit">おトイレの投稿ページ</h1>
 
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto">
+      <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto mt-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <h2 className="text-xl font-semibold mb-2 text-[#03c1ab]">おトイレ名</h2>
@@ -193,7 +193,7 @@ const PostPage = () => {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 };
 

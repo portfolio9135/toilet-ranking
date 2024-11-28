@@ -21,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body
-        className={`${inter.className} custom-bg min-h-screen flex flex-col`}
-      >
+      <body className={`${inter.className} custom-bg min-h-screen flex flex-col`}>
         <RecoilRoot>
           <AuthInitializer>
             <Header />
@@ -36,7 +34,9 @@ export default function RootLayout({
               pauseOnHover
               draggable
             />
-            {children}
+            <div className="w-fit mx-auto pt-32 flex-grow">
+              {children}
+            </div>
             <Footer />
           </AuthInitializer>
         </RecoilRoot>
