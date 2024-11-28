@@ -10,7 +10,7 @@ module.exports = (db) => {
   router.post('/', upload.single('img'), async (req, res) => {
 
     // リクエストボディからデータを取得
-    const { title, address, comment, rating, postingUserId } = req.body;
+    const { title, address, comment, rating, postingUserId, postingUserName } = req.body;
 
     // 画像のパスを取得
     const imgUrl = req.file ? req.file.path : "";
@@ -19,8 +19,8 @@ module.exports = (db) => {
     try {
       // データベースに投稿情報と、投稿をしたユーザーのIDを挿入
       const [result] = await db.query(
-        'INSERT INTO toilets (title, address, comment, rating, imgUrl, postingUserId) VALUES (?, ?, ?, ?, ?, ?)',
-        [title, address, comment, rating, imgUrl, postingUserId]
+        'INSERT INTO toilets (title, address, comment, rating, imgUrl, postingUserId, postingUserName) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [title, address, comment, rating, imgUrl, postingUserId, postingUserName]
       );
 
       // レスポンスを返す

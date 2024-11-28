@@ -27,6 +27,7 @@ const PostDetailPage = ({ params }: PostDetailPageProps) => {
         if (response.ok) {
           const data = await response.json();
 
+          console.log("下記が data です");
           console.log(data);
 
           setPost(data);
@@ -44,7 +45,7 @@ const PostDetailPage = ({ params }: PostDetailPageProps) => {
     };
 
     fetchPost();
-  }, [id]);
+  }, []);
 
   if (!post) return <div className="p-4">読み込み中...</div>;
 

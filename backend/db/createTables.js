@@ -27,7 +27,8 @@ const createTablesIfNotExists = async () => {
         address VARCHAR(255) NOT NULL,
         comment VARCHAR(255),
         rating FLOAT NOT NULL,
-        postingUserId INT NOT NULL
+        postingUserId INT NOT NULL,
+        postingUserName VARCHAR(255) NOT NULL
       ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
     `;
     await db.execute(createToiletsTableQuery);

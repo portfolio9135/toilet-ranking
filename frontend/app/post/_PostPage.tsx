@@ -23,6 +23,7 @@ const PostPage = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
 
   const currentUser = useRecoilValue(authState);
 
@@ -43,6 +44,13 @@ const PostPage = () => {
     }
   }, [currentUser]);
 
+  //【ユーザーネームをセットする関数】
+  useEffect(() => {
+    if (currentUser?.user?.username) {
+      setUserName(currentUser.user.username);
+    }
+  }, [currentUser]);
+
   //【投稿送信時に発火する関数】
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); //ページのリロードを防ぐ
@@ -56,6 +64,7 @@ const PostPage = () => {
     formData.append("comment", comment);
     formData.append("rating", rating.toString()); //数値を文字列に変換して追加
     formData.append("postingUserId", userId);
+    formData.append("postingUserName", userName);
 
     if (img !== null) {
       formData.append("img", img);
