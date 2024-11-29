@@ -33,5 +33,29 @@ module.exports = (db) => {
     }
   });
 
+  // 投稿削除API
+  router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      // 指定されたIDの投稿が存在するか確認
+      const [checkResult] = await db.query('SELECT * FROM toilets WHERE id = ?', [id]);
+      if (checkResult.length === 0) {
+        // 投稿が見つからない場合
+        return res.status(404).json({ error: '削除対象の投稿が見つかりません' });
+      }
+
+      // 投稿を削除
+      const [deleteResult] = await db.query('DELETE FROM toilets WHERE id = ?', [id]);
+
+      // 削除成功レスポンスを返す
+      res.status(200).json({ message: '削除成功', data: deleteResult });
+    } catch (error) {
+      console.error("削除中にエラー発生:", error);
+      res.status(500).json({ error: '削除に失敗しました' });
+    }
+  });
+
+
   return router;
 };

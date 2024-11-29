@@ -121,7 +121,7 @@ const PostPage = () => {
 
   //【HTML部分】
   return (
-    <>
+    <div className="w-fit mx-auto pt-32 flex-grow">
       <h1 className="text-3xl font-bold mx-auto w-fit">おトイレの投稿ページ</h1>
 
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto mt-8">
@@ -193,7 +193,7 @@ const PostPage = () => {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

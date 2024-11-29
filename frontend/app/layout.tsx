@@ -34,9 +34,7 @@ export default function RootLayout({
               pauseOnHover
               draggable
             />
-            <div className="w-fit mx-auto pt-32 flex-grow">
-              {children}
-            </div>
+            {children}
             <Footer />
           </AuthInitializer>
         </RecoilRoot>

@@ -5,6 +5,8 @@ import Image from "next/image";
 import ReactStars from "react-rating-stars-component";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../_store/authState";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface PostDetailPageProps {
   params: {
@@ -13,6 +15,8 @@ interface PostDetailPageProps {
 }
 
 const PostDetailPage = ({ params }: PostDetailPageProps) => {
+  const router = useRouter();
+
   const { id } = params;
   const [post, setPost] = useState<any | null>(null);
   const [rating, setRating] = useState(0);
@@ -47,10 +51,31 @@ const PostDetailPage = ({ params }: PostDetailPageProps) => {
     fetchPost();
   }, []);
 
+  //削除ボタンがクリックされた時の処理
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/post/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        toast.success("投稿を削除しました");
+        router.push("/");
+      } else {
+        alert("投稿の削除に失敗しました");
+      }
+    } catch (error) {
+      console.error("エラー発生:", error);
+    }
+  };
+
   if (!post) return <div className="p-4">読み込み中...</div>;
 
   return (
-    <>
+    <div className="w-fit mx-auto pt-32 flex-grow">
       <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6 mt-6">
         <h1 className="text-3xl font-bold mb-4 text-center text-[#02a38a]">{post.title}</h1>
 
@@ -101,7 +126,7 @@ const PostDetailPage = ({ params }: PostDetailPageProps) => {
           {currentUser?.user?.id === post.postingUserId && (
             <button
               className="mt-4 w-2/6 py-2 bg-gradient-to-r from-[#03c1ab] to-[#02a38a] text-white font-bold rounded-lg shadow-lg hover:opacity-80"
-              onClick={() => console.log("編集ボタンがクリックされました")}
+              onClick={() => alert("編集ボタンがクリックされました")}
             >
               編集する
             </button>
@@ -110,14 +135,14 @@ const PostDetailPage = ({ params }: PostDetailPageProps) => {
           {currentUser?.user?.id === post.postingUserId && (
             <button
               className="mt-4 w-2/6 py-2 bg-gradient-to-r from-[#d9534f] to-[#c9302c] text-white font-bold rounded-lg shadow-lg hover:opacity-80"
-              onClick={() => console.log("編集ボタンがクリックされました")}
+              onClick={handleDelete}
             >
               削除する
             </button>
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

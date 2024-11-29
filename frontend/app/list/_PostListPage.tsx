@@ -46,7 +46,7 @@ const PostListPage = () => {
   }, []);
 
   return (
-    <>
+    <div className="w-fit mx-auto pt-32 flex-grow">
       <div className="max-w-[1280px] mx-auto">
         <h2 className="font-bold text-2xl mb-6 mx-auto w-fit">投稿されたトイレの一覧</h2>
         <ul className="custom-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 break-words">
@@ -86,7 +86,11 @@ const PostListPage = () => {
                 </div>
 
                 <div>
-                  投稿者: {toilet.postingUserName}
+                  {currentUser && currentUser.user.id === toilet.postingUserId ? (
+                    <p>投稿者: 自分</p>
+                  ) : (
+                    <p>投稿者: {toilet.postingUserName}</p>
+                  )}
                 </div>
 
                 {/* 星の評価 */}
@@ -104,7 +108,7 @@ const PostListPage = () => {
           ))}
         </ul>
       </div>
-    </>
+    </div>
   );
 };
 

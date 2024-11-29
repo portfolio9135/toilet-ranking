@@ -3,9 +3,9 @@ import PostListPage from './_PostListPage'
 
 function page() {
   return (
-    <div>
+    <>
       <PostListPage />
-    </div>
+    </>
   )
 }
 
